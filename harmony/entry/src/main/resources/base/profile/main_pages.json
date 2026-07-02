@@ -1,0 +1,13 @@
+{
+  "src": [
+    "pages/Main",
+    "pages/AddTransaction",
+    "pages/Statistics",
+    "pages/CategoryTransactions",
+    "pages/ScreenshotRecognize",
+    "pages/ImportPreview",
+    "pages/BackupPreview",
+    "pages/CategoryManage",
+    "pages/AddCategory"
+  ]
+}

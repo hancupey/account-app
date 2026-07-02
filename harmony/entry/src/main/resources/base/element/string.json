@@ -1,0 +1,132 @@
+{
+  "string": [
+    {
+      "name": "module_desc",
+      "value": "简账 - 本地记账应用"
+    },
+    {
+      "name": "EntryAbility_desc",
+      "value": "简账应用入口"
+    },
+    {
+      "name": "EntryAbility_label",
+      "value": "简账"
+    },
+    {
+      "name": "app_title",
+      "value": "简账"
+    },
+    {
+      "name": "stats_title",
+      "value": "统计"
+    },
+    {
+      "name": "add_transaction",
+      "value": "记一笔"
+    },
+    {
+      "name": "no_transactions",
+      "value": "暂无流水"
+    },
+    {
+      "name": "confirm_delete_title",
+      "value": "确认删除"
+    },
+    {
+      "name": "confirm_delete_message",
+      "value": "确定要删除这条记录吗？"
+    },
+    {
+      "name": "period_day",
+      "value": "日"
+    },
+    {
+      "name": "period_month",
+      "value": "月"
+    },
+    {
+      "name": "period_year",
+      "value": "年"
+    },
+    {
+      "name": "screenshot_recognize",
+      "value": "从截图识别"
+    },
+    {
+      "name": "screenshot_recognize_hint",
+      "value": "选择账单详情页截图（最多 9 张），自动识别金额、商户与时间。"
+    },
+    {
+      "name": "screenshot_pick_and_recognize",
+      "value": "选择截图并识别"
+    },
+    {
+      "name": "screenshot_manual_entry",
+      "value": "跳过识别，手动记账"
+    },
+    {
+      "name": "screenshot_delete_after_save",
+      "value": "识别后删除截图"
+    },
+    {
+      "name": "screenshot_saving",
+      "value": "保存中..."
+    },
+    {
+      "name": "import_bills",
+      "value": "导入账单"
+    },
+    {
+      "name": "import_preview",
+      "value": "导入预览"
+    },
+    {
+      "name": "backup_title",
+      "value": "数据备份"
+    },
+    {
+      "name": "backup_export_desc",
+      "value": "导出全部数据到 JSON 文件"
+    },
+    {
+      "name": "backup_restore_title",
+      "value": "从备份恢复"
+    },
+    {
+      "name": "backup_restore_desc",
+      "value": "从 JSON 备份文件恢复数据"
+    },
+    {
+      "name": "backup_preview_title",
+      "value": "备份恢复预览"
+    },
+    {
+      "name": "backup_saved",
+      "value": "备份已保存"
+    },
+    {
+      "name": "backup_failed",
+      "value": "备份失败"
+    },
+    {
+      "name": "restore_failed",
+      "value": "恢复失败"
+    },
+    {
+      "name": "restore_merge",
+      "value": "合并导入"
+    },
+    {
+      "name": "restore_overwrite",
+      "value": "全量覆盖"
+    },
+    {
+      "name": "restore_overwrite_confirm_title",
+      "value": "确认全量覆盖"
+    },
+    {
+      "name": "restore_overwrite_confirm_message",
+      "value": "将清空本地全部流水后导入备份数据，此操作不可撤销。确定继续吗？"
+    }
+  ]
+}

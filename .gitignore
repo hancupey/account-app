@@ -1,0 +1,13 @@
+# OS / IDE
+.DS_Store
+*.log
+.idea/
+.vscode/
+*.local
+
+# HarmonyOS / DevEco
+harmony/**/build/
+harmony/**/.hvigor/
+harmony/**/oh_modules/
+local.properties
+.cxx/

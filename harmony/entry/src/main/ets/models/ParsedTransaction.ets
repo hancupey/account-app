@@ -7,7 +7,7 @@ export type PaymentPlatform = 'wechat' | 'alipay' | 'unknown';
 export class ParsedTransaction {
   amount: number = 0;
   type: TransactionType = 'expense';
-  /** 支付对象 / 商户名（如 樟荣沙县、全家FamilyMart） */
+  /** 支付对象 / 商户名（如 示例商户、测试商户） */
   payee: string = '';
   note: string = '';
   occurredAt: number = 0;

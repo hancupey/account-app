@@ -10,7 +10,7 @@ const STARBUCKS_OCR = `14:30
 -28.00
 支付成功
 支付时间
-2026-07-01 09:05:33
+2026-01-15 14:30:00
 商品
 美式咖啡
 付款方式
@@ -54,24 +54,24 @@ const INCOME_TRANSFER_OCR = `账单详情
 转账说明
 还款`;
 
-const ZHANG_RONG_OCR = `10:50
-樟荣沙县
+const SAMPLE_MERCHANT_OCR = `10:50
+示例餐厅A
 -29.00
 支付成功
 支付时间
 2026年6月28日 13:01:14
 商品
-636义乌樟荣江东街道店-点餐即支付-2931779347549276181
+测试门店-点餐即支付-ORD000001
 商户全称
-三明沙县樟荣餐饮服务有限公司
+示例餐饮有限公司
 收单机构
 拉卡拉支付股份有限公司
 支付方式
 零钱
 交易单号
-4500000283202606287677043509
+WX202606280001
 商户单号
-20260628110113130266224559797346
+MCH202606280001
 微信支付
 账单详情`;
 
@@ -84,35 +84,35 @@ export default function wechatScreenshotParserTest() {
       expect(result.amount).assertEqual(28);
       expect(result.payee).assertEqual('星巴克');
       expect(result.note).assertEqual('美式咖啡');
-      expect(formatDateTime(result.occurredAt)).assertEqual('2026-07-01 09:05:33');
+      expect(formatDateTime(result.occurredAt)).assertEqual('2026-01-15 14:30:00');
     });
 
-    it('parsesZhangRongShaXianBillDetail', 0, () => {
-      const result = WechatScreenshotParser.parse(ZHANG_RONG_OCR);
+    it('parsesSampleMerchantBillDetail', 0, () => {
+      const result = WechatScreenshotParser.parse(SAMPLE_MERCHANT_OCR);
       expect(result.type).assertEqual('expense');
       expect(result.amount).assertEqual(29);
-      expect(result.payee).assertEqual('樟荣沙县');
-      expect(result.note).assertEqual('636义乌樟荣江东街道店-点餐即支付-2931779347549276181');
+      expect(result.payee).assertEqual('示例餐厅A');
+      expect(result.note).assertEqual('测试门店-点餐即支付-ORD000001');
       expect(formatDateTime(result.occurredAt)).assertEqual('2026-06-28 13:01:14');
     });
 
-    it('parsesZhangRongInlineGoodsWithoutSeparator', 0, () => {
-      const ocrText = `樟荣沙县\n-29.00\n支付成功\n支付时间\n2026年6月28日 13:01:14\n商品636义乌樟荣江东街道店-点餐即支付-2931779347549276181\n商户全称\n三明沙县樟荣餐饮服务有限公司`;
+    it('parsesSampleMerchantInlineGoodsWithoutSeparator', 0, () => {
+      const ocrText = `示例餐厅A\n-29.00\n支付成功\n支付时间\n2026年6月28日 13:01:14\n商品测试门店-点餐即支付-ORD000001\n商户全称\n示例餐饮有限公司`;
       const result = WechatScreenshotParser.parse(ocrText);
-      expect(result.payee).assertEqual('樟荣沙县');
-      expect(result.note).assertEqual('636义乌樟荣江东街道店-点餐即支付-2931779347549276181');
+      expect(result.payee).assertEqual('示例餐厅A');
+      expect(result.note).assertEqual('测试门店-点餐即支付-ORD000001');
     });
 
-    it('parsesZhangRongInlineGoodsWithColon', 0, () => {
-      const ocrText = `樟荣沙县\n-29.00\n商品：636义乌樟荣江东街道店-点餐即支付-2931779347549276181\n商户全称\n三明沙县樟荣餐饮服务有限公司`;
+    it('parsesSampleMerchantInlineGoodsWithColon', 0, () => {
+      const ocrText = `示例餐厅A\n-29.00\n商品：测试门店-点餐即支付-ORD000001\n商户全称\n示例餐饮有限公司`;
       const result = WechatScreenshotParser.parse(ocrText);
-      expect(result.note).assertEqual('636义乌樟荣江东街道店-点餐即支付-2931779347549276181');
+      expect(result.note).assertEqual('测试门店-点餐即支付-ORD000001');
     });
 
     it('doesNotUseShangHuQuanChengAsNote', 0, () => {
-      const ocrText = `樟荣沙县\n-29.00\n商户全称\n三明沙县樟荣餐饮服务有限公司\n商品\n636义乌樟荣江东街道店-点餐即支付-2931779347549276181`;
+      const ocrText = `示例餐厅A\n-29.00\n商户全称\n示例餐饮有限公司\n商品\n测试门店-点餐即支付-ORD000001`;
       const result = WechatScreenshotParser.parse(ocrText);
-      expect(result.note).assertEqual('636义乌樟荣江东街道店-点餐即支付-2931779347549276181');
+      expect(result.note).assertEqual('测试门店-点餐即支付-ORD000001');
     });
 
     it('detectsExpenseFromSplitTransferTime', 0, () => {

@@ -5,6 +5,13 @@
 .vscode/
 *.local
 
+# Python debug artifacts
+__pycache__/
+*.pyc
+tools/__pycache__/
+csv_debug.txt
+tools/csv_debug.txt
+
 # HarmonyOS / DevEco
 harmony/**/build/
 harmony/**/.hvigor/

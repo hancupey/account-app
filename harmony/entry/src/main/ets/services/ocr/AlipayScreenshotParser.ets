@@ -1,5 +1,6 @@
 import { ParsedTransaction, PaymentPlatform } from '../../models/ParsedTransaction';
 import { TransactionType } from '../../models/Transaction';
+import { AlipayCategoryMapper } from '../import/AlipayCategoryMapper';
 import { parseDateTimeString } from '../../utils/DateUtil';
 import {
   detectTypeFromAmountSign,
@@ -37,6 +38,7 @@ export class AlipayScreenshotParser {
     result.occurredAt = AlipayScreenshotParser.extractDateTime(lines, joined);
     result.payee = AlipayScreenshotParser.extractPayee(lines);
     result.note = AlipayScreenshotParser.extractNote(lines);
+    AlipayScreenshotParser.applyCategoryMapping(result, lines);
     result.confidence = AlipayScreenshotParser.calcConfidence(result);
     return result;
   }
@@ -139,6 +141,20 @@ export class AlipayScreenshotParser {
 
   private static extractNote(lines: string[]): string {
     return extractLabeledNote(lines, ['商品说明', '商品描述']);
+  }
+
+  private static extractBillCategory(lines: string[]): string {
+    return extractLabeledNote(lines, ['账单分类']);
+  }
+
+  private static applyCategoryMapping(result: ParsedTransaction, lines: string[]): void {
+    const alipayLabel = AlipayScreenshotParser.extractBillCategory(lines);
+    if (alipayLabel.length === 0) {
+      return;
+    }
+    const mapped = AlipayCategoryMapper.mapCategory(alipayLabel, result.type);
+    result.type = mapped.type;
+    result.categoryName = mapped.categoryName;
   }
 
   private static parseNumber(text: string): number {

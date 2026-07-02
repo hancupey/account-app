@@ -35,7 +35,47 @@ export default function alipayScreenshotParserTest() {
       expect(result.amount).assertEqual(6);
       expect(result.payee).assertEqual('测试商户B');
       expect(result.note).assertEqual('测试商品说明');
+      expect(result.categoryName).assertEqual('日用');
       expect(formatDateTime(result.occurredAt)).assertEqual('2026-01-15 10:00:00');
+    });
+
+    it('parsesBillCategoryFromNextLine', 0, () => {
+      const ocrText = `账单详情
+杭州市西湖区腾业便利店
+-3.50
+交易成功
+支付时间
+2026-07-02 14:03:19
+商品说明
+二维码支付
+账单分类
+日用百货
+计入收支`;
+      const result = AlipayScreenshotParser.parse(ocrText);
+      expect(result.type).assertEqual('expense');
+      expect(result.amount).assertEqual(3.5);
+      expect(result.payee).assertEqual('杭州市西湖区腾业便利店');
+      expect(result.note).assertEqual('二维码支付');
+      expect(result.categoryName).assertEqual('日用');
+    });
+
+    it('parsesBillCategoryInlineWithColon', 0, () => {
+      const ocrText = `账单详情\n测试商户\n-10.00\n账单分类：餐饮美食\n商品说明\n午餐`;
+      const result = AlipayScreenshotParser.parse(ocrText);
+      expect(result.categoryName).assertEqual('餐饮');
+    });
+
+    it('fallsBackToEmptyCategoryWhenBillCategoryMissing', 0, () => {
+      const ocrText = `账单详情\n测试商户\n-5.00\n商品说明\n测试`;
+      const result = AlipayScreenshotParser.parse(ocrText);
+      expect(result.categoryName).assertEqual('');
+    });
+
+    it('mapsIncomeCategoryFromBillCategory', 0, () => {
+      const ocrText = `账单详情\n+100.00\n账单分类\n转账红包\n商品说明\n红包`;
+      const result = AlipayScreenshotParser.parse(ocrText);
+      expect(result.type).assertEqual('income');
+      expect(result.categoryName).assertEqual('礼金');
     });
 
     it('parsesSampleInlineShangPinShuoMingWithColon', 0, () => {

@@ -49,9 +49,14 @@ export default function ocrParseUtilTest() {
       expect(extractLabeledNote(lines, ['商品说明', '商品描述'])).assertEqual('测试商品说明');
     });
 
-    it('extractsShangPinMiaoShuAlias', 0, () => {
-      const lines = splitOcrLines(`商户\n-1.00\n商品描述\n测试商品说明`);
-      expect(extractLabeledNote(lines, ['商品说明', '商品描述'])).assertEqual('测试商品说明');
+    it('extractsAlipayBillCategoryFromNextLine', 0, () => {
+      const lines = splitOcrLines(`测试商户B\n-6.00\n账单分类\n日用百货\n商品说明\n测试商品说明`);
+      expect(extractLabeledNote(lines, ['账单分类'])).assertEqual('日用百货');
+    });
+
+    it('extractsAlipayBillCategoryInlineWithColon', 0, () => {
+      const lines = splitOcrLines(`测试商户B\n-6.00\n账单分类：餐饮美食`);
+      expect(extractLabeledNote(lines, ['账单分类'])).assertEqual('餐饮美食');
     });
 
     it('isExactLabelLineRejectsPartialMatch', 0, () => {

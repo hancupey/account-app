@@ -16,4 +16,6 @@ export class ParsedTransaction {
   rawText: string = '';
   /** 解析置信度 0~1，低于阈值时提示用户核对 */
   confidence: number = 0;
+  /** 映射后的应用分类名（如 日用）；空则使用收支类型默认分类 */
+  categoryName: string = '';
 }

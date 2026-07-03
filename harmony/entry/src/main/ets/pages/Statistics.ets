@@ -238,15 +238,15 @@ struct Statistics {
     Row() {
       Text(stat.categoryName)
         .fontSize(15)
-        .fontColor('#333333')
+        .fontColor($r('app.color.text_primary'))
         .layoutWeight(1)
       Text(`${stat.type === 'income' ? '+' : '-'}¥${formatAmount(stat.total)}`)
         .fontSize(15)
         .fontWeight(FontWeight.Medium)
-        .fontColor(stat.type === 'income' ? '#2E7D32' : '#C62828')
+        .fontColor(stat.type === 'income' ? $r('app.color.income') : $r('app.color.expense'))
       Text('›')
         .fontSize(18)
-        .fontColor('#BBBBBB')
+        .fontColor($r('app.color.text_muted'))
         .margin({ left: 8 })
     }
     .width('100%')
@@ -262,8 +262,8 @@ struct Statistics {
           .layoutWeight(1)
           .height(36)
           .fontSize(15)
-          .backgroundColor(this.periodType === type ? '#1565C0' : '#EEEEEE')
-          .fontColor(this.periodType === type ? '#FFFFFF' : '#666666')
+          .backgroundColor(this.periodType === type ? $r('app.color.brand_primary') : '#EEEEEE')
+          .fontColor(this.periodType === type ? $r('app.color.text_on_primary') : $r('app.color.text_secondary'))
           .onClick(() => this.switchPeriod(type))
       }, (type: PeriodType) => type)
     }
@@ -276,7 +276,7 @@ struct Statistics {
     Row() {
       Text('‹')
         .fontSize(28)
-        .fontColor('#333333')
+        .fontColor($r('app.color.text_primary'))
         .width(40)
         .textAlign(TextAlign.Center)
         .onClick(() => this.shiftDate(-1))
@@ -292,7 +292,7 @@ struct Statistics {
 
       Text('›')
         .fontSize(28)
-        .fontColor('#333333')
+        .fontColor($r('app.color.text_primary'))
         .width(40)
         .textAlign(TextAlign.Center)
         .onClick(() => this.shiftDate(1))
@@ -307,11 +307,11 @@ struct Statistics {
       if (cell.day > 0) {
         Text(`${cell.day}`)
           .fontSize(14)
-          .fontColor('#333333')
+          .fontColor($r('app.color.text_primary'))
         if (cell.expense > 0) {
           Text(this.formatCompactAmount(cell.expense))
             .fontSize(10)
-            .fontColor('#C62828')
+            .fontColor($r('app.color.expense'))
             .maxLines(1)
             .textOverflow({ overflow: TextOverflow.Ellipsis })
         }
@@ -320,7 +320,7 @@ struct Statistics {
     .width('100%')
     .height(52)
     .justifyContent(FlexAlign.Center)
-    .backgroundColor(cell.day > 0 && cell.expense > 0 ? '#FFF3E0' : '#FAFAFA')
+    .backgroundColor(cell.day > 0 && cell.expense > 0 ? $r('app.color.expense_highlight') : $r('app.color.card_background_alt'))
     .borderRadius(6)
     .onClick(() => {
       if (cell.date !== null) {
@@ -334,7 +334,7 @@ struct Statistics {
     Column() {
       Text('每日支出')
         .fontSize(16)
-        .fontColor('#666666')
+        .fontColor($r('app.color.text_secondary'))
         .margin({ bottom: 12 })
         .alignSelf(ItemAlign.Start)
 
@@ -342,7 +342,7 @@ struct Statistics {
         ForEach(this.weekdayLabels, (label: string) => {
           Text(label)
             .fontSize(12)
-            .fontColor('#888888')
+            .fontColor($r('app.color.text_tertiary'))
             .layoutWeight(1)
             .textAlign(TextAlign.Center)
         }, (label: string) => label)
@@ -364,7 +364,7 @@ struct Statistics {
     }
     .width('100%')
     .padding(20)
-    .backgroundColor('#F5F5F5')
+    .backgroundColor($r('app.color.card_background'))
     .borderRadius(12)
   }
 
@@ -373,16 +373,16 @@ struct Statistics {
     Column({ space: 4 }) {
       Text(`${month}月`)
         .fontSize(15)
-        .fontColor('#333333')
+        .fontColor($r('app.color.text_primary'))
       Text(this.formatCompactAmount(this.getMonthlyExpense(month)))
         .fontSize(12)
-        .fontColor('#C62828')
+        .fontColor($r('app.color.expense'))
         .fontWeight(FontWeight.Medium)
     }
     .width('100%')
     .height(72)
     .justifyContent(FlexAlign.Center)
-    .backgroundColor(this.getMonthlyExpense(month) > 0 ? '#FFF3E0' : '#FAFAFA')
+    .backgroundColor(this.getMonthlyExpense(month) > 0 ? $r('app.color.expense_highlight') : $r('app.color.card_background_alt'))
     .borderRadius(8)
     .onClick(() => {
       this.drillToMonth(month);
@@ -394,7 +394,7 @@ struct Statistics {
     Column() {
       Text('每月支出')
         .fontSize(16)
-        .fontColor('#666666')
+        .fontColor($r('app.color.text_secondary'))
         .margin({ bottom: 12 })
         .alignSelf(ItemAlign.Start)
 
@@ -412,7 +412,7 @@ struct Statistics {
     }
     .width('100%')
     .padding(20)
-    .backgroundColor('#F5F5F5')
+    .backgroundColor($r('app.color.card_background'))
     .borderRadius(12)
   }
 
@@ -421,18 +421,18 @@ struct Statistics {
     Column() {
       Text(this.getPeriodTitle())
         .fontSize(16)
-        .fontColor('#666666')
+        .fontColor($r('app.color.text_secondary'))
         .margin({ bottom: 16 })
 
       Row() {
         Column() {
           Text('收入')
             .fontSize(14)
-            .fontColor('#888888')
+            .fontColor($r('app.color.text_tertiary'))
           Text(`¥${formatAmount(this.summary.income)}`)
             .fontSize(22)
             .fontWeight(FontWeight.Medium)
-            .fontColor('#2E7D32')
+            .fontColor($r('app.color.income'))
             .margin({ top: 8 })
         }
         .layoutWeight(1)
@@ -440,11 +440,11 @@ struct Statistics {
         Column() {
           Text('支出')
             .fontSize(14)
-            .fontColor('#888888')
+            .fontColor($r('app.color.text_tertiary'))
           Text(`¥${formatAmount(this.summary.expense)}`)
             .fontSize(22)
             .fontWeight(FontWeight.Medium)
-            .fontColor('#C62828')
+            .fontColor($r('app.color.expense'))
             .margin({ top: 8 })
         }
         .layoutWeight(1)
@@ -452,11 +452,11 @@ struct Statistics {
         Column() {
           Text('结余')
             .fontSize(14)
-            .fontColor('#888888')
+            .fontColor($r('app.color.text_tertiary'))
           Text(`¥${formatAmount(this.summary.balance)}`)
             .fontSize(22)
             .fontWeight(FontWeight.Medium)
-            .fontColor('#1565C0')
+            .fontColor($r('app.color.brand_primary'))
             .margin({ top: 8 })
         }
         .layoutWeight(1)
@@ -465,7 +465,7 @@ struct Statistics {
     }
     .width('100%')
     .padding(20)
-    .backgroundColor('#F5F5F5')
+    .backgroundColor($r('app.color.card_background'))
     .borderRadius(12)
   }
 
@@ -474,14 +474,14 @@ struct Statistics {
     Column() {
       Text('分类明细')
         .fontSize(16)
-        .fontColor('#666666')
+        .fontColor($r('app.color.text_secondary'))
         .margin({ bottom: 8 })
         .alignSelf(ItemAlign.Start)
 
       if (this.categoryStats.length === 0) {
         Text('暂无数据')
           .fontSize(15)
-          .fontColor('#999999')
+          .fontColor($r('app.color.text_hint'))
           .padding({ top: 16, bottom: 16 })
       } else {
         ForEach(this.categoryStats, (stat: CategoryStat) => {
@@ -491,7 +491,7 @@ struct Statistics {
     }
     .width('100%')
     .padding(20)
-    .backgroundColor('#F5F5F5')
+    .backgroundColor($r('app.color.card_background'))
     .borderRadius(12)
   }
 
@@ -506,7 +506,7 @@ struct Statistics {
             .layoutWeight(1)
           Text('完成')
             .fontSize(16)
-            .fontColor('#1565C0')
+            .fontColor($r('app.color.brand_primary'))
             .onClick(() => {
               this.showDatePicker = false;
               this.drillStack = [];
@@ -528,7 +528,7 @@ struct Statistics {
       }
       .width('100%')
       .padding(24)
-      .backgroundColor('#FFFFFF')
+      .backgroundColor($r('app.color.page_background'))
       .borderRadius({ topLeft: 16, topRight: 16 })
       .onClick(() => {})
     }
@@ -546,7 +546,7 @@ struct Statistics {
       Row() {
         Text('←')
           .fontSize(22)
-          .fontColor('#333333')
+          .fontColor($r('app.color.text_primary'))
           .onClick(() => this.goBack())
         Text('统计')
           .fontSize(20)
@@ -566,7 +566,7 @@ struct Statistics {
         Column() {
           Text('加载中...')
             .fontSize(16)
-            .fontColor('#888888')
+            .fontColor($r('app.color.text_tertiary'))
         }
         .layoutWeight(1)
         .justifyContent(FlexAlign.Center)
@@ -593,7 +593,7 @@ struct Statistics {
     }
     .width('100%')
     .height('100%')
-    .backgroundColor('#FFFFFF')
+    .backgroundColor($r('app.color.page_background'))
     .bindContentCover(this.showDatePicker, this.DatePickerCover(), {
       modalTransition: ModalTransition.DEFAULT,
       onDisappear: () => {

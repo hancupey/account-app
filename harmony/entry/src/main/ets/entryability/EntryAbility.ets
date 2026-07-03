@@ -1,17 +1,14 @@
-import { AbilityConstant, ConfigurationConstant, UIAbility, Want } from '@kit.AbilityKit';
+import { AbilityConstant, UIAbility, Want } from '@kit.AbilityKit';
 import { hilog } from '@kit.PerformanceAnalysisKit';
 import { window } from '@kit.ArkUI';
+import { ThemeService } from '../services/ThemeService';
 import { TransactionService } from '../services/TransactionService';
 
 const DOMAIN = 0x0000;
 
 export default class EntryAbility extends UIAbility {
   onCreate(want: Want, launchParam: AbilityConstant.LaunchParam): void {
-    try {
-      this.context.getApplicationContext().setColorMode(ConfigurationConstant.ColorMode.COLOR_MODE_NOT_SET);
-    } catch (err) {
-      hilog.error(DOMAIN, 'testTag', 'Failed to set colorMode. Cause: %{public}s', JSON.stringify(err));
-    }
+    ThemeService.getInstance().initOnStartup(this.context);
     TransactionService.getInstance().init(this.context).catch((err: Error) => {
       hilog.error(DOMAIN, 'testTag', 'Failed to init database. Cause: %{public}s', JSON.stringify(err));
     });
@@ -32,6 +29,13 @@ export default class EntryAbility extends UIAbility {
         return;
       }
       hilog.info(DOMAIN, 'testTag', 'Succeeded in loading the content.');
+      windowStage.getMainWindow((winErr, mainWindow) => {
+        if (winErr.code) {
+          hilog.error(DOMAIN, 'testTag', 'Failed to get main window. Cause: %{public}s', JSON.stringify(winErr));
+          return;
+        }
+        ThemeService.getInstance().applyWindowBackground(this.context, mainWindow);
+      });
     });
   }
 

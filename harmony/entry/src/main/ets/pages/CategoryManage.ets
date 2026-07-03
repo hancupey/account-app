@@ -87,7 +87,7 @@ struct CategoryManage {
       },
       secondaryButton: {
         value: '删除',
-        fontColor: '#C62828',
+        fontColor: $r('app.color.expense'),
         action: () => {
           this.deleteCategory(category.id);
         }
@@ -140,7 +140,7 @@ struct CategoryManage {
   DragHandle() {
     SymbolGlyph($r('sys.symbol.line_3_horizontal'))
       .fontSize(22)
-      .fontColor(['#1565C0'])
+      .fontColor([$r('app.color.brand_primary')])
       .opacity(0.55)
       .width(32)
       .height(32)
@@ -152,10 +152,10 @@ struct CategoryManage {
       Column({ space: 4 }) {
         Text(category.name)
           .fontSize(16)
-          .fontColor('#333333')
+          .fontColor($r('app.color.text_primary'))
         Text(category.isSystem ? '系统默认' : '自定义')
           .fontSize(12)
-          .fontColor(category.isSystem ? '#888888' : '#1565C0')
+          .fontColor(category.isSystem ? $r('app.color.text_tertiary') : $r('app.color.brand_primary'))
       }
       .alignItems(HorizontalAlign.Start)
       .layoutWeight(1)
@@ -163,14 +163,14 @@ struct CategoryManage {
       if (!category.isSystem) {
         Text('编辑')
           .fontSize(14)
-          .fontColor('#1565C0')
+          .fontColor($r('app.color.brand_primary'))
           .margin({ right: 16 })
           .onClick(() => {
             this.openEdit(category);
           })
         Text('删除')
           .fontSize(14)
-          .fontColor('#C62828')
+          .fontColor($r('app.color.expense'))
           .margin({ right: 12 })
           .onClick(() => {
             this.confirmDelete(category);
@@ -188,7 +188,7 @@ struct CategoryManage {
       Row() {
         Text('←')
           .fontSize(22)
-          .fontColor('#333333')
+          .fontColor($r('app.color.text_primary'))
           .onClick(() => router.back())
         Text('分类管理')
           .fontSize(20)
@@ -197,7 +197,7 @@ struct CategoryManage {
           .textAlign(TextAlign.Center)
         Text('添加')
           .fontSize(16)
-          .fontColor('#1565C0')
+          .fontColor($r('app.color.brand_primary'))
           .onClick(() => this.openAdd())
       }
       .width('100%')
@@ -208,16 +208,16 @@ struct CategoryManage {
           .layoutWeight(1)
           .height(40)
           .fontSize(16)
-          .backgroundColor(this.categoryType === 'expense' ? '#C62828' : '#EEEEEE')
-          .fontColor(this.categoryType === 'expense' ? '#FFFFFF' : '#666666')
+          .backgroundColor(this.categoryType === 'expense' ? $r('app.color.expense') : '#EEEEEE')
+          .fontColor(this.categoryType === 'expense' ? $r('app.color.text_on_primary') : $r('app.color.text_secondary'))
           .onClick(() => this.switchType('expense'))
 
         Button('收入')
           .layoutWeight(1)
           .height(40)
           .fontSize(16)
-          .backgroundColor(this.categoryType === 'income' ? '#2E7D32' : '#EEEEEE')
-          .fontColor(this.categoryType === 'income' ? '#FFFFFF' : '#666666')
+          .backgroundColor(this.categoryType === 'income' ? $r('app.color.income') : '#EEEEEE')
+          .fontColor(this.categoryType === 'income' ? $r('app.color.text_on_primary') : $r('app.color.text_secondary'))
           .onClick(() => this.switchType('income'))
       }
       .width('100%')
@@ -227,7 +227,7 @@ struct CategoryManage {
         Column() {
           Text('加载中...')
             .fontSize(16)
-            .fontColor('#888888')
+            .fontColor($r('app.color.text_tertiary'))
         }
         .layoutWeight(1)
         .justifyContent(FlexAlign.Center)
@@ -235,7 +235,7 @@ struct CategoryManage {
         Column() {
           Text('暂无分类')
             .fontSize(16)
-            .fontColor('#888888')
+            .fontColor($r('app.color.text_tertiary'))
           Button('添加分类')
             .margin({ top: 16 })
             .onClick(() => this.openAdd())
@@ -245,7 +245,7 @@ struct CategoryManage {
       } else {
         Text('长按并拖动右侧手柄调整顺序')
           .fontSize(13)
-          .fontColor('#888888')
+          .fontColor($r('app.color.text_tertiary'))
           .width('100%')
           .padding({ left: 16, right: 16, bottom: 8 })
 
@@ -262,11 +262,11 @@ struct CategoryManage {
         .layoutWeight(1)
         .width('100%')
         .padding({ left: 16, right: 16 })
-        .divider({ strokeWidth: 1, color: '#EEEEEE' })
+        .divider({ strokeWidth: 1, color: $r('app.color.border_divider') })
       }
     }
     .width('100%')
     .height('100%')
-    .backgroundColor('#FFFFFF')
+    .backgroundColor($r('app.color.page_background'))
   }
 }

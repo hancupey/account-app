@@ -126,8 +126,8 @@ struct ImportPreview {
         .layoutWeight(1)
         .height(38)
         .fontSize(14)
-        .backgroundColor(this.selectedPlatform === 'unknown' ? '#1565C0' : '#EEEEEE')
-        .fontColor(this.selectedPlatform === 'unknown' ? '#FFFFFF' : '#666666')
+        .backgroundColor(this.selectedPlatform === 'unknown' ? $r('app.color.brand_primary') : '#EEEEEE')
+        .fontColor(this.selectedPlatform === 'unknown' ? $r('app.color.text_on_primary') : $r('app.color.text_secondary'))
         .onClick(() => {
           this.switchPlatform('unknown');
         })
@@ -135,8 +135,8 @@ struct ImportPreview {
         .layoutWeight(1)
         .height(38)
         .fontSize(14)
-        .backgroundColor(this.selectedPlatform === 'wechat' ? '#07C160' : '#EEEEEE')
-        .fontColor(this.selectedPlatform === 'wechat' ? '#FFFFFF' : '#666666')
+        .backgroundColor(this.selectedPlatform === 'wechat' ? $r('app.color.wechat') : '#EEEEEE')
+        .fontColor(this.selectedPlatform === 'wechat' ? $r('app.color.text_on_primary') : $r('app.color.text_secondary'))
         .onClick(() => {
           this.switchPlatform('wechat');
         })
@@ -144,8 +144,8 @@ struct ImportPreview {
         .layoutWeight(1)
         .height(38)
         .fontSize(14)
-        .backgroundColor(this.selectedPlatform === 'alipay' ? '#1677FF' : '#EEEEEE')
-        .fontColor(this.selectedPlatform === 'alipay' ? '#FFFFFF' : '#666666')
+        .backgroundColor(this.selectedPlatform === 'alipay' ? $r('app.color.alipay') : '#EEEEEE')
+        .fontColor(this.selectedPlatform === 'alipay' ? $r('app.color.text_on_primary') : $r('app.color.text_secondary'))
         .onClick(() => {
           this.switchPlatform('alipay');
         })
@@ -159,19 +159,19 @@ struct ImportPreview {
       Column({ space: 2 }) {
         Text(draft.note.length > 0 ? draft.note : draft.categoryName)
           .fontSize(14)
-          .fontColor('#333333')
+          .fontColor($r('app.color.text_primary'))
           .maxLines(1)
           .textOverflow({ overflow: TextOverflow.Ellipsis })
         Text(`${formatDateTime(draft.occurredAt)} · ${draft.categoryName}`)
           .fontSize(12)
-          .fontColor('#888888')
+          .fontColor($r('app.color.text_tertiary'))
       }
       .alignItems(HorizontalAlign.Start)
       .layoutWeight(1)
 
       Text(`${draft.type === 'income' ? '+' : '-'}¥${formatAmount(draft.amount)}`)
         .fontSize(14)
-        .fontColor(draft.type === 'income' ? '#2E7D32' : '#C62828')
+        .fontColor(draft.type === 'income' ? $r('app.color.income') : $r('app.color.expense'))
     }
     .width('100%')
     .padding({ top: 8, bottom: 8 })
@@ -182,7 +182,7 @@ struct ImportPreview {
       Row() {
         Text('←')
           .fontSize(22)
-          .fontColor('#333333')
+          .fontColor($r('app.color.text_primary'))
           .onClick(() => router.back())
         Text('导入预览')
           .fontSize(20)
@@ -199,7 +199,7 @@ struct ImportPreview {
         Column() {
           Text('解析中...')
             .fontSize(16)
-            .fontColor('#888888')
+            .fontColor($r('app.color.text_tertiary'))
         }
         .layoutWeight(1)
         .justifyContent(FlexAlign.Center)
@@ -215,7 +215,7 @@ struct ImportPreview {
               if (this.selectedPlatform === 'unknown' && this.detectedPlatform !== 'unknown') {
                 Text(`自动识别为：${this.getPlatformLabel(this.detectedPlatform)}`)
                   .fontSize(13)
-                  .fontColor('#1565C0')
+                  .fontColor($r('app.color.brand_primary'))
                   .alignSelf(ItemAlign.Start)
               }
             }
@@ -225,14 +225,14 @@ struct ImportPreview {
             Column({ space: 4 }) {
               Text(`文件：${this.fileName}`)
                 .fontSize(14)
-                .fontColor('#666666')
+                .fontColor($r('app.color.text_secondary'))
               Text(`来源：${this.getPlatformLabel()}`)
                 .fontSize(14)
-                .fontColor('#666666')
+                .fontColor($r('app.color.text_secondary'))
               Text(`共 ${this.drafts.length} 条记录`)
                 .fontSize(18)
                 .fontWeight(FontWeight.Medium)
-                .fontColor('#333333')
+                .fontColor($r('app.color.text_primary'))
                 .margin({ top: 4 })
             }
             .width('100%')
@@ -241,7 +241,7 @@ struct ImportPreview {
             Row() {
               Text('跳过重复记录')
                 .fontSize(15)
-                .fontColor('#333333')
+                .fontColor($r('app.color.text_primary'))
                 .layoutWeight(1)
               Toggle({ type: ToggleType.Switch, isOn: this.skipDuplicates })
                 .onChange((isOn: boolean) => {
@@ -250,7 +250,7 @@ struct ImportPreview {
             }
             .width('100%')
             .padding(12)
-            .backgroundColor('#F5F5F5')
+            .backgroundColor($r('app.color.card_background'))
             .borderRadius(8)
 
             if (this.drafts.length > 0) {
@@ -266,20 +266,20 @@ struct ImportPreview {
               }
               .width('100%')
               .padding(12)
-              .backgroundColor('#FAFAFA')
+              .backgroundColor($r('app.color.card_background_alt'))
               .borderRadius(8)
             }
 
             ForEach(this.parseErrors, (msg: string, index: number) => {
               Text(msg)
                 .fontSize(14)
-                .fontColor('#C62828')
+                .fontColor($r('app.color.expense'))
             }, (msg: string, index: number) => `${index}_${msg}`)
 
             if (this.errorMessage.length > 0) {
               Text(this.errorMessage)
                 .fontSize(14)
-                .fontColor('#C62828')
+                .fontColor($r('app.color.expense'))
             }
           }
           .width('100%')
@@ -297,6 +297,6 @@ struct ImportPreview {
     }
     .width('100%')
     .height('100%')
-    .backgroundColor('#FFFFFF')
+    .backgroundColor($r('app.color.page_background'))
   }
 }

@@ -22,7 +22,7 @@ import {
  * - 金额：-12.34 / 12.34 / ¥12.34
  * - 交易成功 / 等待确认收货
  * - 支付时间 / 付款时间：2024-01-15 12:30:45
- * - 商品说明 / 收款方全称 / 对方账户
+ * - 商品说明 / 收款方全称 / 对方账户（备注由用户手动填写，不自动识别）
  * - 页面顶部商户名（如 全家FamilyMart）
  */
 export class AlipayScreenshotParser {
@@ -37,7 +37,7 @@ export class AlipayScreenshotParser {
     result.amount = AlipayScreenshotParser.extractAmount(lines, joined);
     result.occurredAt = AlipayScreenshotParser.extractDateTime(lines, joined);
     result.payee = AlipayScreenshotParser.extractPayee(lines);
-    result.note = AlipayScreenshotParser.extractNote(lines);
+    result.note = '';
     AlipayScreenshotParser.applyCategoryMapping(result, lines);
     result.confidence = AlipayScreenshotParser.calcConfidence(result);
     return result;
@@ -139,10 +139,6 @@ export class AlipayScreenshotParser {
     return '';
   }
 
-  private static extractNote(lines: string[]): string {
-    return extractLabeledNote(lines, ['商品说明', '商品描述']);
-  }
-
   private static extractBillCategory(lines: string[]): string {
     return extractLabeledNote(lines, ['账单分类']);
   }
@@ -174,7 +170,7 @@ export class AlipayScreenshotParser {
     if (result.occurredAt > 0) {
       score += 0.2;
     }
-    if (result.payee.length > 0 || result.note.length > 0) {
+    if (result.payee.length > 0) {
       score += 0.2;
     }
     if (/支付宝|Alipay/.test(result.rawText)) {

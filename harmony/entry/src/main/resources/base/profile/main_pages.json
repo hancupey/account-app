@@ -8,6 +8,7 @@
     "pages/ImportPreview",
     "pages/BackupPreview",
     "pages/CategoryManage",
-    "pages/AddCategory"
+    "pages/AddCategory",
+    "pages/AppearanceSettings"
   ]
 }

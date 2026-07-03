@@ -69,6 +69,7 @@ export struct SettingsContent {
         Text('设置')
           .fontSize(28)
           .fontWeight(FontWeight.Bold)
+          .fontColor($r('app.color.text_primary'))
       }
       .width('100%')
       .padding({ left: 16, right: 16, top: 48, bottom: 16 })
@@ -76,13 +77,30 @@ export struct SettingsContent {
       List() {
         ListItem() {
           Row() {
-            Text('分类管理')
+            Text($r('app.string.appearance_section'))
               .fontSize(16)
-              .fontColor('#333333')
+              .fontColor($r('app.color.text_primary'))
               .layoutWeight(1)
             Text('›')
               .fontSize(20)
-              .fontColor('#CCCCCC')
+              .fontColor($r('app.color.text_chevron'))
+          }
+          .width('100%')
+          .padding({ top: 16, bottom: 16 })
+          .onClick(() => {
+            router.pushUrl({ url: 'pages/AppearanceSettings' });
+          })
+        }
+
+        ListItem() {
+          Row() {
+            Text('分类管理')
+              .fontSize(16)
+              .fontColor($r('app.color.text_primary'))
+              .layoutWeight(1)
+            Text('›')
+              .fontSize(20)
+              .fontColor($r('app.color.text_chevron'))
           }
           .width('100%')
           .padding({ top: 16, bottom: 16 })
@@ -96,16 +114,16 @@ export struct SettingsContent {
             Column({ space: 4 }) {
               Text('数据备份')
                 .fontSize(16)
-                .fontColor('#333333')
+                .fontColor($r('app.color.text_primary'))
               Text(this.exporting ? '导出中...' : '导出全部数据到 JSON 文件')
                 .fontSize(13)
-                .fontColor('#888888')
+                .fontColor($r('app.color.text_tertiary'))
             }
             .alignItems(HorizontalAlign.Start)
             .layoutWeight(1)
             Text('›')
               .fontSize(20)
-              .fontColor('#CCCCCC')
+              .fontColor($r('app.color.text_chevron'))
           }
           .width('100%')
           .padding({ top: 16, bottom: 16 })
@@ -119,16 +137,16 @@ export struct SettingsContent {
             Column({ space: 4 }) {
               Text('从备份恢复')
                 .fontSize(16)
-                .fontColor('#333333')
+                .fontColor($r('app.color.text_primary'))
               Text(this.restoring ? '选择中...' : '从 JSON 备份文件恢复数据')
                 .fontSize(13)
-                .fontColor('#888888')
+                .fontColor($r('app.color.text_tertiary'))
             }
             .alignItems(HorizontalAlign.Start)
             .layoutWeight(1)
             Text('›')
               .fontSize(20)
-              .fontColor('#CCCCCC')
+              .fontColor($r('app.color.text_chevron'))
           }
           .width('100%')
           .padding({ top: 16, bottom: 16 })
@@ -142,10 +160,10 @@ export struct SettingsContent {
             Column({ space: 4 }) {
               Text('关于')
                 .fontSize(16)
-                .fontColor('#BBBBBB')
+                .fontColor($r('app.color.text_muted'))
               Text('即将推出')
                 .fontSize(13)
-                .fontColor('#CCCCCC')
+                .fontColor($r('app.color.text_chevron'))
             }
             .alignItems(HorizontalAlign.Start)
             .layoutWeight(1)
@@ -157,10 +175,10 @@ export struct SettingsContent {
       .width('100%')
       .layoutWeight(1)
       .padding({ left: 16, right: 16 })
-      .divider({ strokeWidth: 1, color: '#EEEEEE' })
+      .divider({ strokeWidth: 1, color: $r('app.color.border_divider') })
     }
     .width('100%')
     .height('100%')
-    .backgroundColor('#FFFFFF')
+    .backgroundColor($r('app.color.page_background'))
   }
 }

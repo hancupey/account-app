@@ -5,6 +5,7 @@ import { TransactionType } from '../models/Transaction';
 import { TransactionService } from '../services/TransactionService';
 import { applyPickerDateKeepTime, formatDateTime } from '../utils/DateUtil';
 import { formatAmount, parseAmount } from '../utils/MoneyUtil';
+import { PickerThemeUtil } from '../utils/PickerThemeUtil';
 
 @Entry
 @Component
@@ -159,16 +160,17 @@ struct AddTransaction {
       Row() {
         Text('←')
           .fontSize(22)
-          .fontColor('#333333')
+          .fontColor($r('app.color.text_primary'))
           .onClick(() => router.back())
         Text(this.editingTransactionId > 0 ? '修改' : '记一笔')
           .fontSize(20)
           .fontWeight(FontWeight.Medium)
+          .fontColor($r('app.color.text_primary'))
           .layoutWeight(1)
           .textAlign(TextAlign.Center)
         Text('保存')
           .fontSize(16)
-          .fontColor(this.saving ? '#AAAAAA' : '#1565C0')
+          .fontColor(this.saving ? $r('app.color.text_disabled') : $r('app.color.brand_primary'))
           .onClick(() => {
             if (!this.saving) {
               this.save();
@@ -185,16 +187,16 @@ struct AddTransaction {
               .layoutWeight(1)
               .height(40)
               .fontSize(16)
-              .backgroundColor(this.transactionType === 'expense' ? '#C62828' : '#EEEEEE')
-              .fontColor(this.transactionType === 'expense' ? '#FFFFFF' : '#666666')
+              .backgroundColor(this.transactionType === 'expense' ? $r('app.color.expense') : $r('app.color.button_inactive_bg'))
+              .fontColor(this.transactionType === 'expense' ? $r('app.color.text_on_primary') : $r('app.color.text_secondary'))
               .onClick(() => this.switchType('expense'))
 
             Button('收入')
               .layoutWeight(1)
               .height(40)
               .fontSize(16)
-              .backgroundColor(this.transactionType === 'income' ? '#2E7D32' : '#EEEEEE')
-              .fontColor(this.transactionType === 'income' ? '#FFFFFF' : '#666666')
+              .backgroundColor(this.transactionType === 'income' ? $r('app.color.income') : $r('app.color.button_inactive_bg'))
+              .fontColor(this.transactionType === 'income' ? $r('app.color.text_on_primary') : $r('app.color.text_secondary'))
               .onClick(() => this.switchType('income'))
           }
           .width('100%')
@@ -205,8 +207,8 @@ struct AddTransaction {
               .width('90%')
               .height(40)
               .fontSize(15)
-              .backgroundColor('#E3F2FD')
-              .fontColor('#1565C0')
+              .backgroundColor($r('app.color.brand_light'))
+              .fontColor($r('app.color.brand_primary'))
               .margin({ top: 12 })
               .onClick(() => {
                 router.pushUrl({ url: 'pages/ScreenshotRecognize' });
@@ -216,12 +218,17 @@ struct AddTransaction {
           Column({ space: 8 }) {
             Text('金额')
               .fontSize(14)
-              .fontColor('#666666')
+              .fontColor($r('app.color.text_secondary'))
               .alignSelf(ItemAlign.Start)
             TextInput({ text: this.amountText, placeholder: '0.00' })
+              .width('100%')
               .type(InputType.NUMBER_DECIMAL)
               .fontSize(28)
               .fontWeight(FontWeight.Medium)
+              .fontColor($r('app.color.text_primary'))
+              .placeholderColor($r('app.color.text_hint'))
+              .backgroundColor($r('app.color.input_background'))
+              .caretColor($r('app.color.brand_primary'))
               .onChange((value: string) => {
                 this.amountText = value;
               })
@@ -232,19 +239,21 @@ struct AddTransaction {
           Column({ space: 8 }) {
             Text('分类')
               .fontSize(14)
-              .fontColor('#666666')
+              .fontColor($r('app.color.text_secondary'))
               .alignSelf(ItemAlign.Start)
             if (this.categoryOptions.length > 0) {
               Select(this.categoryOptions)
                 .selected(this.selectedCategoryIndex)
                 .value(this.categoryOptions[this.selectedCategoryIndex].value)
+                .font({ size: 16 })
+                .fontColor($r('app.color.text_primary'))
                 .onSelect((index: number) => {
                   this.selectedCategoryIndex = index;
                 })
             } else {
               Text('暂无分类')
                 .fontSize(16)
-                .fontColor('#999999')
+                .fontColor($r('app.color.text_hint'))
             }
           }
           .width('100%')
@@ -253,9 +262,14 @@ struct AddTransaction {
           Column({ space: 8 }) {
             Text('支付对象')
               .fontSize(14)
-              .fontColor('#666666')
+              .fontColor($r('app.color.text_secondary'))
               .alignSelf(ItemAlign.Start)
             TextInput({ text: this.payee, placeholder: '商户/收款方（可选）' })
+              .width('100%')
+              .fontColor($r('app.color.text_primary'))
+              .placeholderColor($r('app.color.text_hint'))
+              .backgroundColor($r('app.color.input_background'))
+              .caretColor($r('app.color.brand_primary'))
               .onChange((value: string) => {
                 this.payee = value;
               })
@@ -266,9 +280,14 @@ struct AddTransaction {
           Column({ space: 8 }) {
             Text('备注')
               .fontSize(14)
-              .fontColor('#666666')
+              .fontColor($r('app.color.text_secondary'))
               .alignSelf(ItemAlign.Start)
             TextInput({ text: this.note, placeholder: '可选' })
+              .width('100%')
+              .fontColor($r('app.color.text_primary'))
+              .placeholderColor($r('app.color.text_hint'))
+              .backgroundColor($r('app.color.input_background'))
+              .caretColor($r('app.color.brand_primary'))
               .cancelButton({ style: CancelButtonStyle.INPUT })
               .onChange((value: string) => {
                 this.note = value;
@@ -280,18 +299,18 @@ struct AddTransaction {
           Column({ space: 8 }) {
             Text('时间')
               .fontSize(14)
-              .fontColor('#666666')
+              .fontColor($r('app.color.text_secondary'))
               .alignSelf(ItemAlign.Start)
             Row({ space: 8 }) {
               Text(formatDateTime(this.selectedDate.getTime()))
                 .fontSize(15)
-                .fontColor('#333333')
+                .fontColor($r('app.color.text_primary'))
                 .layoutWeight(1)
                 .maxLines(1)
                 .textOverflow({ overflow: TextOverflow.Ellipsis })
               Text(this.showDateTimeEditor ? '收起' : '修改')
                 .fontSize(14)
-                .fontColor('#1565C0')
+                .fontColor($r('app.color.brand_primary'))
                 .padding({ left: 8, right: 8, top: 4, bottom: 4 })
                 .onClick(() => {
                   this.showDateTimeEditor = !this.showDateTimeEditor;
@@ -299,7 +318,7 @@ struct AddTransaction {
             }
             .width('100%')
             .padding({ left: 12, right: 12, top: 10, bottom: 10 })
-            .backgroundColor('#F0F0F0')
+            .backgroundColor($r('app.color.input_background'))
             .borderRadius(8)
             .alignItems(VerticalAlign.Center)
             .onClick(() => {
@@ -314,6 +333,9 @@ struct AddTransaction {
                 end: new Date('2035-12-31'),
                 selected: this.selectedDate
               })
+                .disappearTextStyle(PickerThemeUtil.disappearStyle())
+                .textStyle(PickerThemeUtil.textStyle())
+                .selectedTextStyle(PickerThemeUtil.selectedStyle())
                 .lunar(false)
                 .onDateChange((value: Date) => {
                   this.selectedDate = applyPickerDateKeepTime(value, this.selectedDate);
@@ -321,6 +343,9 @@ struct AddTransaction {
               TimePicker({
                 selected: this.selectedDate
               })
+                .disappearTextStyle(PickerThemeUtil.disappearStyle())
+                .textStyle(PickerThemeUtil.textStyle())
+                .selectedTextStyle(PickerThemeUtil.selectedStyle())
                 .onChange((value: TimePickerResult) => {
                   this.updateTimePart(value);
                 })
@@ -332,7 +357,7 @@ struct AddTransaction {
           if (this.errorMessage.length > 0) {
             Text(this.errorMessage)
               .fontSize(14)
-              .fontColor('#C62828')
+              .fontColor($r('app.color.expense'))
               .margin({ top: 16 })
           }
         }
@@ -347,6 +372,6 @@ struct AddTransaction {
     }
     .width('100%')
     .height('100%')
-    .backgroundColor('#FFFFFF')
+    .backgroundColor($r('app.color.page_background'))
   }
 }

@@ -83,7 +83,7 @@ export default function wechatScreenshotParserTest() {
       expect(result.type).assertEqual('expense');
       expect(result.amount).assertEqual(28);
       expect(result.payee).assertEqual('星巴克');
-      expect(result.note).assertEqual('美式咖啡');
+      expect(result.note).assertEqual('');
       expect(formatDateTime(result.occurredAt)).assertEqual('2026-01-15 14:30:00');
     });
 
@@ -92,7 +92,7 @@ export default function wechatScreenshotParserTest() {
       expect(result.type).assertEqual('expense');
       expect(result.amount).assertEqual(29);
       expect(result.payee).assertEqual('示例餐厅A');
-      expect(result.note).assertEqual('测试门店-点餐即支付-ORD000001');
+      expect(result.note).assertEqual('');
       expect(formatDateTime(result.occurredAt)).assertEqual('2026-06-28 13:01:14');
     });
 
@@ -100,19 +100,19 @@ export default function wechatScreenshotParserTest() {
       const ocrText = `示例餐厅A\n-29.00\n支付成功\n支付时间\n2026年6月28日 13:01:14\n商品测试门店-点餐即支付-ORD000001\n商户全称\n示例餐饮有限公司`;
       const result = WechatScreenshotParser.parse(ocrText);
       expect(result.payee).assertEqual('示例餐厅A');
-      expect(result.note).assertEqual('测试门店-点餐即支付-ORD000001');
+      expect(result.note).assertEqual('');
     });
 
     it('parsesSampleMerchantInlineGoodsWithColon', 0, () => {
       const ocrText = `示例餐厅A\n-29.00\n商品：测试门店-点餐即支付-ORD000001\n商户全称\n示例餐饮有限公司`;
       const result = WechatScreenshotParser.parse(ocrText);
-      expect(result.note).assertEqual('测试门店-点餐即支付-ORD000001');
+      expect(result.note).assertEqual('');
     });
 
     it('doesNotUseShangHuQuanChengAsNote', 0, () => {
       const ocrText = `示例餐厅A\n-29.00\n商户全称\n示例餐饮有限公司\n商品\n测试门店-点餐即支付-ORD000001`;
       const result = WechatScreenshotParser.parse(ocrText);
-      expect(result.note).assertEqual('测试门店-点餐即支付-ORD000001');
+      expect(result.note).assertEqual('');
     });
 
     it('detectsExpenseFromSplitTransferTime', 0, () => {
@@ -128,7 +128,7 @@ export default function wechatScreenshotParserTest() {
       const result = WechatScreenshotParser.parse(JI_RU_SHOU_ZHI_OCR);
       expect(result.type).assertEqual('expense');
       expect(result.payee).assertEqual('测试商户');
-      expect(result.note).assertEqual('商品名');
+      expect(result.note).assertEqual('');
     });
 
     it('parsesIncomeTransfer', 0, () => {

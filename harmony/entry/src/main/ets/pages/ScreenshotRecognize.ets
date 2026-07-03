@@ -206,7 +206,7 @@ struct ScreenshotRecognize {
       },
       secondaryButton: {
         value: '删除',
-        fontColor: '#C62828',
+        fontColor: $r('app.color.expense'),
         action: () => {
           this.removeDraft(draft.id);
         }
@@ -401,8 +401,8 @@ struct ScreenshotRecognize {
         .layoutWeight(1)
         .height(38)
         .fontSize(14)
-        .backgroundColor(this.selectedPlatform === 'unknown' ? '#1565C0' : '#EEEEEE')
-        .fontColor(this.selectedPlatform === 'unknown' ? '#FFFFFF' : '#666666')
+        .backgroundColor(this.selectedPlatform === 'unknown' ? $r('app.color.brand_primary') : $r('app.color.button_inactive_bg'))
+        .fontColor(this.selectedPlatform === 'unknown' ? $r('app.color.text_on_primary') : $r('app.color.text_secondary'))
         .onClick(() => {
           this.selectedPlatform = 'unknown';
           if (this.drafts.length > 0) {
@@ -413,8 +413,8 @@ struct ScreenshotRecognize {
         .layoutWeight(1)
         .height(38)
         .fontSize(14)
-        .backgroundColor(this.selectedPlatform === 'wechat' ? '#07C160' : '#EEEEEE')
-        .fontColor(this.selectedPlatform === 'wechat' ? '#FFFFFF' : '#666666')
+        .backgroundColor(this.selectedPlatform === 'wechat' ? $r('app.color.wechat') : $r('app.color.button_inactive_bg'))
+        .fontColor(this.selectedPlatform === 'wechat' ? $r('app.color.text_on_primary') : $r('app.color.text_secondary'))
         .onClick(() => {
           this.selectedPlatform = 'wechat';
           if (this.drafts.length > 0) {
@@ -425,8 +425,8 @@ struct ScreenshotRecognize {
         .layoutWeight(1)
         .height(38)
         .fontSize(14)
-        .backgroundColor(this.selectedPlatform === 'alipay' ? '#1677FF' : '#EEEEEE')
-        .fontColor(this.selectedPlatform === 'alipay' ? '#FFFFFF' : '#666666')
+        .backgroundColor(this.selectedPlatform === 'alipay' ? $r('app.color.alipay') : $r('app.color.button_inactive_bg'))
+        .fontColor(this.selectedPlatform === 'alipay' ? $r('app.color.text_on_primary') : $r('app.color.text_secondary'))
         .onClick(() => {
           this.selectedPlatform = 'alipay';
           if (this.drafts.length > 0) {
@@ -443,19 +443,19 @@ struct ScreenshotRecognize {
       Column({ space: 4 }) {
         Text(this.draftTitle(draft))
           .fontSize(15)
-          .fontColor(draft.status === 'failed' ? '#C62828' : '#333333')
+          .fontColor(draft.status === 'failed' ? $r('app.color.expense') : $r('app.color.text_primary'))
           .maxLines(1)
           .textOverflow({ overflow: TextOverflow.Ellipsis })
         if (draft.status === 'recognized') {
           Text(`${formatDateTime(draft.occurredAt)} · ${draft.categoryName}`)
             .fontSize(12)
-            .fontColor('#888888')
+            .fontColor($r('app.color.text_tertiary'))
             .maxLines(1)
             .textOverflow({ overflow: TextOverflow.Ellipsis })
         } else {
           Text('左滑可删除')
             .fontSize(12)
-            .fontColor('#AAAAAA')
+            .fontColor($r('app.color.text_disabled'))
         }
       }
       .alignItems(HorizontalAlign.Start)
@@ -464,18 +464,18 @@ struct ScreenshotRecognize {
       if (draft.status === 'recognized') {
         Text(`${draft.type === 'income' ? '+' : '-'}¥${formatAmount(draft.amount)}`)
           .fontSize(15)
-          .fontColor(draft.type === 'income' ? '#2E7D32' : '#C62828')
+          .fontColor(draft.type === 'income' ? $r('app.color.income') : $r('app.color.expense'))
       } else {
         Text('未识别')
           .fontSize(13)
-          .fontColor('#C62828')
+          .fontColor($r('app.color.expense'))
       }
     }
     .width('100%')
     .constraintSize({ minHeight: 52 })
     .padding({ top: 12, bottom: 12, left: 4, right: 8 })
     .alignItems(VerticalAlign.Center)
-    .backgroundColor('#FFFFFF')
+    .backgroundColor($r('app.color.item_background'))
   }
 
   @Builder
@@ -487,13 +487,13 @@ struct ScreenshotRecognize {
         Row() {
           Text('修改')
             .fontSize(16)
-            .fontColor('#FFFFFF')
+            .fontColor($r('app.color.text_on_primary'))
         }
         .width(80)
         .height('100%')
         .padding({ left: 12, right: 12 })
         .justifyContent(FlexAlign.Center)
-        .backgroundColor('#1565C0')
+        .backgroundColor($r('app.color.brand_primary'))
         .onClick(() => {
           this.openEdit(draft);
         })
@@ -501,13 +501,13 @@ struct ScreenshotRecognize {
       Row() {
         Text('删除')
           .fontSize(16)
-          .fontColor('#FFFFFF')
+          .fontColor($r('app.color.text_on_primary'))
       }
       .width(80)
       .height('100%')
       .padding({ left: 12, right: 12 })
       .justifyContent(FlexAlign.Center)
-      .backgroundColor('#C62828')
+      .backgroundColor($r('app.color.expense'))
       .onClick(() => {
         this.confirmRemoveDraft(draft);
       })
@@ -520,7 +520,7 @@ struct ScreenshotRecognize {
     ListItem() {
       this.DraftRow(draft)
     }
-    .backgroundColor('#FFFFFF')
+    .backgroundColor($r('app.color.item_background'))
     .swipeAction({
       end: {
         builder: () => {
@@ -536,7 +536,7 @@ struct ScreenshotRecognize {
     Column({ space: 20 }) {
       Text($r('app.string.screenshot_recognize_hint'))
         .fontSize(14)
-        .fontColor('#888888')
+        .fontColor($r('app.color.text_tertiary'))
         .width('100%')
 
       this.PlatformSelector()
@@ -544,7 +544,7 @@ struct ScreenshotRecognize {
       if (this.selectedPlatform === 'unknown' && this.detectedPlatform !== 'unknown') {
         Text(`自动识别为：${this.platformLabel(this.detectedPlatform)}`)
           .fontSize(13)
-          .fontColor('#1565C0')
+          .fontColor($r('app.color.brand_primary'))
           .width('100%')
       }
 
@@ -558,14 +558,14 @@ struct ScreenshotRecognize {
       if (this.loading && this.recognizeTotal > 0) {
         Text(`识别中 ${this.recognizeProgress}/${this.recognizeTotal}...`)
           .fontSize(14)
-          .fontColor('#1565C0')
+          .fontColor($r('app.color.brand_primary'))
           .width('100%')
       }
 
       if (this.errorMessage.length > 0) {
         Text(this.errorMessage)
           .fontSize(14)
-          .fontColor('#C62828')
+          .fontColor($r('app.color.expense'))
           .width('100%')
       }
 
@@ -574,8 +574,8 @@ struct ScreenshotRecognize {
           .width('100%')
           .height(44)
           .fontSize(15)
-          .backgroundColor('#EEEEEE')
-          .fontColor('#333333')
+          .backgroundColor($r('app.color.button_inactive_bg'))
+          .fontColor($r('app.color.text_primary'))
           .onClick(() => {
             router.pushUrl({ url: 'pages/AddTransaction' });
           })
@@ -593,7 +593,7 @@ struct ScreenshotRecognize {
         Column({ space: 16 }) {
           Text($r('app.string.screenshot_recognize_hint'))
             .fontSize(14)
-            .fontColor('#888888')
+            .fontColor($r('app.color.text_tertiary'))
             .width('100%')
 
           this.PlatformSelector()
@@ -601,21 +601,21 @@ struct ScreenshotRecognize {
           if (this.selectedPlatform === 'unknown' && this.detectedPlatform !== 'unknown') {
             Text(`自动识别为：${this.platformLabel(this.detectedPlatform)}`)
               .fontSize(13)
-              .fontColor('#1565C0')
+              .fontColor($r('app.color.brand_primary'))
               .width('100%')
           }
 
           Row({ space: 8 }) {
             Text(`共 ${this.drafts.length} 张`)
               .fontSize(14)
-              .fontColor('#666666')
+              .fontColor($r('app.color.text_secondary'))
             Text(`成功 ${this.getRecognizedCount()} 条`)
               .fontSize(14)
-              .fontColor('#2E7D32')
+              .fontColor($r('app.color.income'))
             if (this.getFailedCount() > 0) {
               Text(`未识别 ${this.getFailedCount()} 张`)
                 .fontSize(14)
-                .fontColor('#C62828')
+                .fontColor($r('app.color.expense'))
             }
           }
           .width('100%')
@@ -626,13 +626,13 @@ struct ScreenshotRecognize {
             }, (draft: RecognizedDraft) => `${draft.id}_${draft.revision}`)
           }
           .width('100%')
-          .divider({ strokeWidth: 1, color: '#F0F0F0' })
+          .divider({ strokeWidth: 1, color: $r('app.color.border_light') })
           .edgeEffect(EdgeEffect.None)
 
           if (this.errorMessage.length > 0) {
             Text(this.errorMessage)
               .fontSize(14)
-              .fontColor('#C62828')
+              .fontColor($r('app.color.expense'))
               .width('100%')
           }
         }
@@ -646,7 +646,7 @@ struct ScreenshotRecognize {
         Row() {
           Text($r('app.string.screenshot_delete_after_save'))
             .fontSize(15)
-            .fontColor('#333333')
+            .fontColor($r('app.color.text_primary'))
             .layoutWeight(1)
           Toggle({ type: ToggleType.Switch, isOn: this.deleteAfterSave })
             .onChange((isOn: boolean) => {
@@ -676,7 +676,7 @@ struct ScreenshotRecognize {
       Row() {
         Text('←')
           .fontSize(22)
-          .fontColor('#333333')
+          .fontColor($r('app.color.text_primary'))
           .onClick(() => this.closeEdit())
         Text('编辑识别结果')
           .fontSize(18)
@@ -685,7 +685,7 @@ struct ScreenshotRecognize {
           .textAlign(TextAlign.Center)
         Text('保存')
           .fontSize(16)
-          .fontColor('#1565C0')
+          .fontColor($r('app.color.brand_primary'))
           .onClick(() => this.saveEdit())
       }
       .width('100%')
@@ -698,15 +698,15 @@ struct ScreenshotRecognize {
               .layoutWeight(1)
               .height(40)
               .fontSize(14)
-              .backgroundColor(this.editType === 'expense' ? '#C62828' : '#EEEEEE')
-              .fontColor(this.editType === 'expense' ? '#FFFFFF' : '#666666')
+              .backgroundColor(this.editType === 'expense' ? $r('app.color.expense') : $r('app.color.button_inactive_bg'))
+              .fontColor(this.editType === 'expense' ? $r('app.color.text_on_primary') : $r('app.color.text_secondary'))
               .onClick(() => { this.switchEditType('expense'); })
             Button('收入')
               .layoutWeight(1)
               .height(40)
               .fontSize(14)
-              .backgroundColor(this.editType === 'income' ? '#2E7D32' : '#EEEEEE')
-              .fontColor(this.editType === 'income' ? '#FFFFFF' : '#666666')
+              .backgroundColor(this.editType === 'income' ? $r('app.color.income') : $r('app.color.button_inactive_bg'))
+              .fontColor(this.editType === 'income' ? $r('app.color.text_on_primary') : $r('app.color.text_secondary'))
               .onClick(() => { this.switchEditType('income'); })
           }
           .width('100%')
@@ -714,19 +714,21 @@ struct ScreenshotRecognize {
           Column({ space: 6 }) {
             Text('分类')
               .fontSize(14)
-              .fontColor('#666666')
+              .fontColor($r('app.color.text_secondary'))
               .alignSelf(ItemAlign.Start)
             if (this.editCategoryOptions.length > 0) {
               Select(this.editCategoryOptions)
                 .selected(this.editCategoryIndex)
                 .value(this.editCategoryOptions[this.editCategoryIndex].value)
+                .font({ size: 16 })
+                .fontColor($r('app.color.text_primary'))
                 .onSelect((index: number) => {
                   this.editCategoryIndex = index;
                 })
             } else {
               Text('暂无分类')
                 .fontSize(16)
-                .fontColor('#999999')
+                .fontColor($r('app.color.text_hint'))
             }
           }
           .width('100%')
@@ -734,13 +736,17 @@ struct ScreenshotRecognize {
           Column({ space: 6 }) {
             Text('金额')
               .fontSize(14)
-              .fontColor('#666666')
+              .fontColor($r('app.color.text_secondary'))
               .alignSelf(ItemAlign.Start)
             TextInput({ text: this.editAmount, placeholder: '0.00' })
               .width('100%')
               .height(44)
               .fontSize(18)
               .type(InputType.NUMBER_DECIMAL)
+              .fontColor($r('app.color.text_primary'))
+              .placeholderColor($r('app.color.text_hint'))
+              .backgroundColor($r('app.color.input_background'))
+              .caretColor($r('app.color.brand_primary'))
               .onChange((v: string) => { this.editAmount = v; })
           }
           .width('100%')
@@ -748,12 +754,16 @@ struct ScreenshotRecognize {
           Column({ space: 6 }) {
             Text('支付对象')
               .fontSize(14)
-              .fontColor('#666666')
+              .fontColor($r('app.color.text_secondary'))
               .alignSelf(ItemAlign.Start)
             TextInput({ text: this.editPayee, placeholder: '商户/收款方' })
               .width('100%')
               .height(44)
               .fontSize(16)
+              .fontColor($r('app.color.text_primary'))
+              .placeholderColor($r('app.color.text_hint'))
+              .backgroundColor($r('app.color.input_background'))
+              .caretColor($r('app.color.brand_primary'))
               .onChange((v: string) => { this.editPayee = v; })
           }
           .width('100%')
@@ -761,12 +771,16 @@ struct ScreenshotRecognize {
           Column({ space: 6 }) {
             Text('备注')
               .fontSize(14)
-              .fontColor('#666666')
+              .fontColor($r('app.color.text_secondary'))
               .alignSelf(ItemAlign.Start)
             TextInput({ text: this.editNote, placeholder: '商品说明' })
               .width('100%')
               .height(44)
               .fontSize(16)
+              .fontColor($r('app.color.text_primary'))
+              .placeholderColor($r('app.color.text_hint'))
+              .backgroundColor($r('app.color.input_background'))
+              .caretColor($r('app.color.brand_primary'))
               .cancelButton({ style: CancelButtonStyle.INPUT })
               .onChange((v: string) => { this.editNote = v; })
           }
@@ -775,18 +789,18 @@ struct ScreenshotRecognize {
           Column({ space: 8 }) {
             Text('时间')
               .fontSize(14)
-              .fontColor('#666666')
+              .fontColor($r('app.color.text_secondary'))
               .alignSelf(ItemAlign.Start)
             Row({ space: 8 }) {
               Text(formatDateTime(this.editDate.getTime()))
                 .fontSize(15)
-                .fontColor('#333333')
+                .fontColor($r('app.color.text_primary'))
                 .layoutWeight(1)
                 .maxLines(1)
                 .textOverflow({ overflow: TextOverflow.Ellipsis })
               Text(this.showDateTimeEditor ? '收起' : '修改')
                 .fontSize(14)
-                .fontColor('#1565C0')
+                .fontColor($r('app.color.brand_primary'))
                 .padding({ left: 8, right: 8, top: 4, bottom: 4 })
                 .onClick(() => {
                   this.showDateTimeEditor = !this.showDateTimeEditor;
@@ -794,7 +808,7 @@ struct ScreenshotRecognize {
             }
             .width('100%')
             .padding({ left: 12, right: 12, top: 10, bottom: 10 })
-            .backgroundColor('#F0F0F0')
+            .backgroundColor($r('app.color.input_background'))
             .borderRadius(8)
 
             if (this.showDateTimeEditor) {
@@ -820,17 +834,17 @@ struct ScreenshotRecognize {
           if (this.editOcrText.length > 0) {
             Text(this.showRawText ? '收起原始文本' : '查看原始 OCR 文本')
               .fontSize(13)
-              .fontColor('#1565C0')
+              .fontColor($r('app.color.brand_primary'))
               .alignSelf(ItemAlign.Start)
               .onClick(() => { this.showRawText = !this.showRawText; })
 
             if (this.showRawText) {
               Text(this.editOcrText)
                 .fontSize(12)
-                .fontColor('#999999')
+                .fontColor($r('app.color.text_hint'))
                 .width('100%')
                 .padding(12)
-                .backgroundColor('#F5F5F5')
+                .backgroundColor($r('app.color.card_background'))
                 .borderRadius(8)
             }
           }
@@ -842,7 +856,7 @@ struct ScreenshotRecognize {
     }
     .width('100%')
     .height('100%')
-    .backgroundColor('#FFFFFF')
+    .backgroundColor($r('app.color.page_background'))
   }
 
   build() {
@@ -851,7 +865,7 @@ struct ScreenshotRecognize {
         Row() {
           Text('←')
             .fontSize(22)
-            .fontColor('#333333')
+            .fontColor($r('app.color.text_primary'))
             .onClick(() => router.back())
           Text($r('app.string.screenshot_recognize'))
             .fontSize(18)
@@ -872,7 +886,7 @@ struct ScreenshotRecognize {
       }
       .width('100%')
       .height('100%')
-      .backgroundColor('#FFFFFF')
+      .backgroundColor($r('app.color.page_background'))
 
       if (this.editingDraftId.length > 0) {
         this.EditOverlay()
@@ -880,5 +894,6 @@ struct ScreenshotRecognize {
     }
     .width('100%')
     .height('100%')
+    .backgroundColor($r('app.color.page_background'))
   }
 }

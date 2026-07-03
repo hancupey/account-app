@@ -127,6 +127,30 @@
     {
       "name": "restore_overwrite_confirm_message",
       "value": "将清空本地全部流水后导入备份数据，此操作不可撤销。确定继续吗？"
+    },
+    {
+      "name": "appearance_section",
+      "value": "外观"
+    },
+    {
+      "name": "theme_switch_title",
+      "value": "切换主题"
+    },
+    {
+      "name": "theme_section_desc",
+      "value": "选择应用主题，跟随系统时将自动适配浅色或深色模式"
+    },
+    {
+      "name": "theme_follow_system",
+      "value": "跟随系统"
+    },
+    {
+      "name": "theme_light",
+      "value": "浅色"
+    },
+    {
+      "name": "theme_dark",
+      "value": "深色"
     }
   ]
 }

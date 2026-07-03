@@ -106,7 +106,7 @@ export struct Index {
       },
       secondaryButton: {
         value: '删除',
-        fontColor: '#C62828',
+        fontColor: $r('app.color.expense'),
         action: () => {
           this.deleteItem(item.id);
         }
@@ -184,13 +184,13 @@ export struct Index {
         if (item.payee.length > 0) {
           Text(item.payee)
             .fontSize(15)
-            .fontColor('#333333')
+            .fontColor($r('app.color.text_primary'))
             .maxLines(1)
             .textOverflow({ overflow: TextOverflow.Ellipsis })
         } else {
           Text(item.categoryName.length > 0 ? item.categoryName : '未分类')
             .fontSize(15)
-            .fontColor('#333333')
+            .fontColor($r('app.color.text_primary'))
             .maxLines(1)
             .textOverflow({ overflow: TextOverflow.Ellipsis })
         }
@@ -198,7 +198,7 @@ export struct Index {
           ? `${formatTransactionListTime(item.occurredAt, this.periodType)} · ${item.note}`
           : formatTransactionListTime(item.occurredAt, this.periodType))
           .fontSize(12)
-          .fontColor('#888888')
+          .fontColor($r('app.color.text_tertiary'))
           .maxLines(1)
           .textOverflow({ overflow: TextOverflow.Ellipsis })
       }
@@ -209,14 +209,14 @@ export struct Index {
       Text(`${item.type === 'income' ? '+' : '-'}¥${formatAmount(item.amount)}`)
         .fontSize(15)
         .fontWeight(FontWeight.Medium)
-        .fontColor(item.type === 'income' ? '#2E7D32' : '#C62828')
+        .fontColor(item.type === 'income' ? $r('app.color.income') : $r('app.color.expense'))
         .flexShrink(0)
     }
     .width('100%')
     .constraintSize({ minHeight: 40 })
     .padding({ top: 8, bottom: 8, left: 4, right: 4 })
     .alignItems(VerticalAlign.Center)
-    .backgroundColor('#FFFFFF')
+    .backgroundColor($r('app.color.item_background'))
   }
 
   @Builder
@@ -227,26 +227,26 @@ export struct Index {
       Row() {
         Text('修改')
           .fontSize(16)
-          .fontColor('#FFFFFF')
+          .fontColor($r('app.color.text_on_primary'))
       }
       .width(80)
       .height('100%')
       .padding({ left: 12, right: 12 })
       .justifyContent(FlexAlign.Center)
-      .backgroundColor('#1565C0')
+      .backgroundColor($r('app.color.brand_primary'))
       .onClick(() => {
         this.openEdit(item);
       })
       Row() {
         Text('删除')
           .fontSize(16)
-          .fontColor('#FFFFFF')
+          .fontColor($r('app.color.text_on_primary'))
       }
       .width(80)
       .height('100%')
       .padding({ left: 12, right: 12 })
       .justifyContent(FlexAlign.Center)
-      .backgroundColor('#C62828')
+      .backgroundColor($r('app.color.expense'))
       .onClick(() => {
         this.confirmDelete(item);
       })
@@ -259,7 +259,7 @@ export struct Index {
     ListItem() {
       this.TransactionRow(item)
     }
-    .backgroundColor('#FFFFFF')
+    .backgroundColor($r('app.color.item_background'))
     .swipeAction({
       end: {
         builder: () => {
@@ -274,10 +274,10 @@ export struct Index {
   GroupHeader(label: string) {
     Text(label)
       .fontSize(13)
-      .fontColor('#666666')
+      .fontColor($r('app.color.text_secondary'))
       .padding({ top: 8, bottom: 4 })
       .width('100%')
-      .backgroundColor('#FFFFFF')
+      .backgroundColor($r('app.color.item_background'))
   }
 
   @Builder
@@ -287,11 +287,11 @@ export struct Index {
         Column({ space: 2 }) {
           Text('收入')
             .fontSize(12)
-            .fontColor('#888888')
+            .fontColor($r('app.color.text_tertiary'))
           Text(this.loading ? '--' : `¥${formatAmount(this.summary.income)}`)
             .fontSize(16)
             .fontWeight(FontWeight.Medium)
-            .fontColor('#2E7D32')
+            .fontColor($r('app.color.income'))
             .maxLines(1)
             .textOverflow({ overflow: TextOverflow.Ellipsis })
         }
@@ -301,11 +301,11 @@ export struct Index {
         Column({ space: 2 }) {
           Text('支出')
             .fontSize(12)
-            .fontColor('#888888')
+            .fontColor($r('app.color.text_tertiary'))
           Text(this.loading ? '--' : `¥${formatAmount(this.summary.expense)}`)
             .fontSize(16)
             .fontWeight(FontWeight.Medium)
-            .fontColor('#C62828')
+            .fontColor($r('app.color.expense'))
             .maxLines(1)
             .textOverflow({ overflow: TextOverflow.Ellipsis })
         }
@@ -315,11 +315,11 @@ export struct Index {
         Column({ space: 2 }) {
           Text('结余')
             .fontSize(12)
-            .fontColor('#888888')
+            .fontColor($r('app.color.text_tertiary'))
           Text(this.loading ? '--' : `¥${formatAmount(this.summary.balance)}`)
             .fontSize(16)
             .fontWeight(FontWeight.Medium)
-            .fontColor('#1565C0')
+            .fontColor($r('app.color.brand_primary'))
             .maxLines(1)
             .textOverflow({ overflow: TextOverflow.Ellipsis })
         }
@@ -330,7 +330,7 @@ export struct Index {
     }
     .width('100%')
     .padding({ left: 12, right: 12, top: 8, bottom: 8 })
-    .backgroundColor('#F5F5F5')
+    .backgroundColor($r('app.color.card_background'))
     .borderRadius(8)
     .margin({ left: 16, right: 16, top: 4, bottom: 4 })
   }
@@ -343,8 +343,8 @@ export struct Index {
           .layoutWeight(1)
           .height(32)
           .fontSize(14)
-          .backgroundColor(this.periodType === type ? '#1565C0' : '#EEEEEE')
-          .fontColor(this.periodType === type ? '#FFFFFF' : '#666666')
+          .backgroundColor(this.periodType === type ? $r('app.color.brand_primary') : $r('app.color.button_inactive_bg'))
+          .fontColor(this.periodType === type ? $r('app.color.text_on_primary') : $r('app.color.text_secondary'))
           .onClick(() => this.switchPeriod(type))
       }, (type: PeriodType) => type)
     }
@@ -357,7 +357,7 @@ export struct Index {
     Row() {
       Text('‹')
         .fontSize(24)
-        .fontColor('#333333')
+        .fontColor($r('app.color.text_primary'))
         .width(36)
         .textAlign(TextAlign.Center)
         .onClick(() => this.shiftDate(-1))
@@ -373,7 +373,7 @@ export struct Index {
 
       Text('›')
         .fontSize(24)
-        .fontColor('#333333')
+        .fontColor($r('app.color.text_primary'))
         .width(36)
         .textAlign(TextAlign.Center)
         .onClick(() => this.shiftDate(1))
@@ -396,15 +396,15 @@ export struct Index {
         .layoutWeight(1)
         .height(36)
         .fontSize(13)
-        .backgroundColor('#E3F2FD')
-        .fontColor('#1565C0')
+        .backgroundColor($r('app.color.brand_light'))
+        .fontColor($r('app.color.brand_primary'))
         .onClick(() => this.openScreenshotRecognize())
       Button('导入账单')
         .layoutWeight(1)
         .height(36)
         .fontSize(13)
-        .backgroundColor('#E8F5E9')
-        .fontColor('#2E7D32')
+        .backgroundColor($r('app.color.income_light'))
+        .fontColor($r('app.color.income'))
         .onClick(() => this.openImportBills())
     }
     .width('100%')
@@ -442,10 +442,11 @@ export struct Index {
         Text($r('app.string.app_title'))
           .fontSize(22)
           .fontWeight(FontWeight.Bold)
+          .fontColor($r('app.color.text_primary'))
           .layoutWeight(1)
         Text('统计')
           .fontSize(15)
-          .fontColor('#1565C0')
+          .fontColor($r('app.color.brand_primary'))
           .onClick(() => this.openStatistics())
       }
       .width('100%')
@@ -460,7 +461,7 @@ export struct Index {
           Column() {
             Text('加载中...')
               .fontSize(15)
-              .fontColor('#888888')
+              .fontColor($r('app.color.text_tertiary'))
           }
           .layoutWeight(1)
           .justifyContent(FlexAlign.Center)
@@ -468,7 +469,7 @@ export struct Index {
           Column() {
             Text('暂无流水')
               .fontSize(15)
-              .fontColor('#888888')
+              .fontColor($r('app.color.text_tertiary'))
             Button('记一笔')
               .height(36)
               .fontSize(15)
@@ -486,7 +487,7 @@ export struct Index {
           .layoutWeight(1)
           .width('100%')
           .padding({ left: 16, right: 16 })
-          .divider({ strokeWidth: 1, color: '#EEEEEE' })
+          .divider({ strokeWidth: 1, color: $r('app.color.border_divider') })
           .scrollBar(BarState.Off)
         }
       }
@@ -497,7 +498,7 @@ export struct Index {
     }
     .width('100%')
     .height('100%')
-    .backgroundColor('#FFFFFF')
+    .backgroundColor($r('app.color.page_background'))
     .bindContentCover(this.showDatePicker, this.DatePickerCover(), {
       modalTransition: ModalTransition.DEFAULT,
       onDisappear: () => {
@@ -514,10 +515,11 @@ export struct Index {
           Text(getPeriodPickerTitle(this.periodType))
             .fontSize(18)
             .fontWeight(FontWeight.Medium)
+            .fontColor($r('app.color.text_primary'))
             .layoutWeight(1)
           Text('完成')
             .fontSize(16)
-            .fontColor('#1565C0')
+            .fontColor($r('app.color.brand_primary'))
             .onClick(() => {
               this.showDatePicker = false;
               this.refreshData();
@@ -537,15 +539,14 @@ export struct Index {
       }
       .width('100%')
       .padding(24)
-      .backgroundColor('#FFFFFF')
+      .backgroundColor($r('app.color.modal_background'))
       .borderRadius({ topLeft: 16, topRight: 16 })
       .onClick(() => {})
     }
     .width('100%')
     .height('100%')
     .justifyContent(FlexAlign.End)
-    .backgroundColor('rgba(0,0,0,0.4)')
-    .onClick(() => {
+    .backgroundColor($r('app.color.overlay_scrim'))    .onClick(() => {
       this.showDatePicker = false;
     })
   }

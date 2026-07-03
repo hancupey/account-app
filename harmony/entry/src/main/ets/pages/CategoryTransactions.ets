@@ -120,19 +120,19 @@ struct CategoryTransactions {
         if (item.payee.length > 0) {
           Text(item.payee)
             .fontSize(16)
-            .fontColor('#333333')
+            .fontColor($r('app.color.text_primary'))
         } else {
           Text(item.categoryName.length > 0 ? item.categoryName : '未分类')
             .fontSize(16)
-            .fontColor('#333333')
+            .fontColor($r('app.color.text_primary'))
         }
         Text(formatTransactionListTime(item.occurredAt, this.periodType))
           .fontSize(13)
-          .fontColor('#888888')
+          .fontColor($r('app.color.text_tertiary'))
         if (item.note.length > 0) {
           Text(item.note)
             .fontSize(13)
-            .fontColor('#888888')
+            .fontColor($r('app.color.text_tertiary'))
         }
       }
       .alignItems(HorizontalAlign.Start)
@@ -142,24 +142,24 @@ struct CategoryTransactions {
       Text(`${item.type === 'income' ? '+' : '-'}¥${formatAmount(item.amount)}`)
         .fontSize(16)
         .fontWeight(FontWeight.Medium)
-        .fontColor(item.type === 'income' ? '#2E7D32' : '#C62828')
+        .fontColor(item.type === 'income' ? $r('app.color.income') : $r('app.color.expense'))
         .flexShrink(0)
     }
     .width('100%')
     .constraintSize({ minHeight: 48 })
     .padding({ top: 12, bottom: 12, left: 4, right: 8 })
     .alignItems(VerticalAlign.Center)
-    .backgroundColor('#FFFFFF')
+    .backgroundColor($r('app.color.item_background'))
   }
 
   @Builder
   GroupHeader(label: string) {
     Text(label)
       .fontSize(14)
-      .fontColor('#666666')
+      .fontColor($r('app.color.text_secondary'))
       .padding({ top: 16, bottom: 8 })
       .width('100%')
-      .backgroundColor('#FFFFFF')
+      .backgroundColor($r('app.color.item_background'))
   }
 
   @Builder
@@ -198,7 +198,7 @@ struct CategoryTransactions {
       Row() {
         Text('←')
           .fontSize(22)
-          .fontColor('#333333')
+          .fontColor($r('app.color.text_primary'))
           .onClick(() => router.back())
         Text(this.getPageTitle())
           .fontSize(18)
@@ -217,7 +217,7 @@ struct CategoryTransactions {
         Column() {
           Text('加载中...')
             .fontSize(16)
-            .fontColor('#888888')
+            .fontColor($r('app.color.text_tertiary'))
         }
         .layoutWeight(1)
         .justifyContent(FlexAlign.Center)
@@ -225,7 +225,7 @@ struct CategoryTransactions {
         Column() {
           Text('暂无流水')
             .fontSize(16)
-            .fontColor('#888888')
+            .fontColor($r('app.color.text_tertiary'))
         }
         .layoutWeight(1)
         .justifyContent(FlexAlign.Center)
@@ -236,11 +236,11 @@ struct CategoryTransactions {
         .layoutWeight(1)
         .width('100%')
         .padding({ left: 16, right: 16 })
-        .divider({ strokeWidth: 1, color: '#EEEEEE' })
+        .divider({ strokeWidth: 1, color: $r('app.color.border_divider') })
       }
     }
     .width('100%')
     .height('100%')
-    .backgroundColor('#FFFFFF')
+    .backgroundColor($r('app.color.page_background'))
   }
 }

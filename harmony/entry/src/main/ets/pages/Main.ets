@@ -16,7 +16,7 @@ struct Main {
     Column() {
       SymbolGlyph($r('sys.symbol.square_and_pencil'))
         .fontSize(24)
-        .fontColor([this.currentTabIndex === 0 ? '#1565C0' : '#999999'])
+        .fontColor([this.currentTabIndex === 0 ? $r('app.color.brand_primary') : $r('app.color.text_hint')])
     }
     .width('100%')
     .height('100%')
@@ -28,7 +28,7 @@ struct Main {
     Column() {
       SymbolGlyph($r('sys.symbol.gearshape'))
         .fontSize(24)
-        .fontColor([this.currentTabIndex === 1 ? '#1565C0' : '#999999'])
+        .fontColor([this.currentTabIndex === 1 ? $r('app.color.brand_primary') : $r('app.color.text_hint')])
     }
     .width('100%')
     .height('100%')
@@ -55,6 +55,6 @@ struct Main {
     })
     .width('100%')
     .height('100%')
-    .backgroundColor('#FFFFFF')
+    .backgroundColor($r('app.color.page_background'))
   }
 }

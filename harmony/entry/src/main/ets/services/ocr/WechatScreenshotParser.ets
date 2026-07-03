@@ -21,7 +21,7 @@ import {
  * - 金额：¥12.34 / -29.00 / -¥12.34
  * - 当前状态：支付成功 / 已转账 / 已收款
  * - 支付时间 / 转账时间 / 收款时间：2024-01-15 12:30:45 / 2026年6月28日 13:01:14
- * - 商品 / 商户全称 / 交易对方 / 收款方备注
+ * - 商品 / 商户全称 / 交易对方 / 收款方备注（备注由用户手动填写，不自动识别）
  */
 export class WechatScreenshotParser {
   static parse(ocrText: string): ParsedTransaction {
@@ -35,7 +35,7 @@ export class WechatScreenshotParser {
     result.amount = WechatScreenshotParser.extractAmount(lines, joined);
     result.occurredAt = WechatScreenshotParser.extractDateTime(lines, joined);
     result.payee = WechatScreenshotParser.extractPayee(lines);
-    result.note = WechatScreenshotParser.extractNote(lines);
+    result.note = '';
     result.confidence = WechatScreenshotParser.calcConfidence(result);
     return result;
   }
@@ -145,10 +145,6 @@ export class WechatScreenshotParser {
     return '';
   }
 
-  private static extractNote(lines: string[]): string {
-    return extractLabeledNote(lines, ['商品']);
-  }
-
   private static parseNumber(text: string): number {
     const cleaned = text.replace(/,/g, '');
     const value = Number.parseFloat(cleaned);
@@ -166,7 +162,7 @@ export class WechatScreenshotParser {
     if (result.occurredAt > 0) {
       score += 0.2;
     }
-    if (result.payee.length > 0 || result.note.length > 0) {
+    if (result.payee.length > 0) {
       score += 0.2;
     }
     if (/微信|WeChat/.test(result.rawText)) {

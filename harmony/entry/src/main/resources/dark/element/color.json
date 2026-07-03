@@ -1,8 +1,32 @@
 {
   "color": [
-    {
-      "name": "start_window_background",
-      "value": "#000000"
-    }
+    { "name": "start_window_background", "value": "#121212" },
+    { "name": "text_primary", "value": "#E8E8E8" },
+    { "name": "text_secondary", "value": "#B0B0B0" },
+    { "name": "text_tertiary", "value": "#909090" },
+    { "name": "text_hint", "value": "#757575" },
+    { "name": "text_disabled", "value": "#666666" },
+    { "name": "text_muted", "value": "#606060" },
+    { "name": "text_chevron", "value": "#555555" },
+    { "name": "text_on_primary", "value": "#FFFFFF" },
+    { "name": "page_background", "value": "#121212" },
+    { "name": "item_background", "value": "#1E1E1E" },
+    { "name": "modal_background", "value": "#2C2C2C" },
+    { "name": "card_background", "value": "#252525" },
+    { "name": "card_background_alt", "value": "#2A2A2A" },
+    { "name": "input_background", "value": "#333333" },
+    { "name": "button_inactive_bg", "value": "#3A3A3A" },
+    { "name": "border_divider", "value": "#3A3A3A" },
+    { "name": "border_light", "value": "#333333" },
+    { "name": "brand_primary", "value": "#64B5F6" },
+    { "name": "brand_light", "value": "#1A3A5C" },
+    { "name": "income", "value": "#66BB6A" },
+    { "name": "income_light", "value": "#1B3D1F" },
+    { "name": "expense", "value": "#EF5350" },
+    { "name": "expense_light", "value": "#3D1B1B" },
+    { "name": "expense_highlight", "value": "#4A3520" },
+    { "name": "wechat", "value": "#07C160" },
+    { "name": "alipay", "value": "#1677FF" },
+    { "name": "overlay_scrim", "value": "#99000000" }
   ]
 }

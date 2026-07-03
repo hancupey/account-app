@@ -76,16 +76,17 @@ struct AddCategory {
       Row() {
         Text('←')
           .fontSize(22)
-          .fontColor('#333333')
+          .fontColor($r('app.color.text_primary'))
           .onClick(() => router.back())
         Text(this.getTitle())
           .fontSize(20)
           .fontWeight(FontWeight.Medium)
+          .fontColor($r('app.color.text_primary'))
           .layoutWeight(1)
           .textAlign(TextAlign.Center)
         Text('保存')
           .fontSize(16)
-          .fontColor(this.saving ? '#AAAAAA' : '#1565C0')
+          .fontColor(this.saving ? $r('app.color.text_disabled') : $r('app.color.brand_primary'))
           .onClick(() => {
             if (!this.saving) {
               this.save();
@@ -98,11 +99,11 @@ struct AddCategory {
       Column({ space: 8 }) {
         Text('类型')
           .fontSize(14)
-          .fontColor('#666666')
+          .fontColor($r('app.color.text_secondary'))
           .alignSelf(ItemAlign.Start)
         Text(this.categoryType === 'expense' ? '支出' : '收入')
           .fontSize(16)
-          .fontColor('#333333')
+          .fontColor($r('app.color.text_primary'))
           .alignSelf(ItemAlign.Start)
       }
       .width('100%')
@@ -111,9 +112,13 @@ struct AddCategory {
       Column({ space: 8 }) {
         Text('名称')
           .fontSize(14)
-          .fontColor('#666666')
+          .fontColor($r('app.color.text_secondary'))
           .alignSelf(ItemAlign.Start)
         TextInput({ text: this.nameText, placeholder: '请输入分类名称' })
+          .fontColor($r('app.color.text_primary'))
+          .placeholderColor($r('app.color.text_hint'))
+          .backgroundColor($r('app.color.input_background'))
+          .caretColor($r('app.color.brand_primary'))
           .onChange((value: string) => {
             this.nameText = value;
           })
@@ -124,13 +129,13 @@ struct AddCategory {
       if (this.errorMessage.length > 0) {
         Text(this.errorMessage)
           .fontSize(14)
-          .fontColor('#C62828')
+          .fontColor($r('app.color.expense'))
           .margin({ top: 16 })
           .padding({ left: 24, right: 24 })
       }
     }
     .width('100%')
     .height('100%')
-    .backgroundColor('#FFFFFF')
+    .backgroundColor($r('app.color.page_background'))
   }
 }

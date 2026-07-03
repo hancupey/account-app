@@ -34,7 +34,7 @@ export default function alipayScreenshotParserTest() {
       expect(result.type).assertEqual('expense');
       expect(result.amount).assertEqual(6);
       expect(result.payee).assertEqual('测试商户B');
-      expect(result.note).assertEqual('测试商品说明');
+      expect(result.note).assertEqual('');
       expect(result.categoryName).assertEqual('日用');
       expect(formatDateTime(result.occurredAt)).assertEqual('2026-01-15 10:00:00');
     });
@@ -55,7 +55,7 @@ export default function alipayScreenshotParserTest() {
       expect(result.type).assertEqual('expense');
       expect(result.amount).assertEqual(3.5);
       expect(result.payee).assertEqual('杭州市西湖区腾业便利店');
-      expect(result.note).assertEqual('二维码支付');
+      expect(result.note).assertEqual('');
       expect(result.categoryName).assertEqual('日用');
     });
 
@@ -82,20 +82,20 @@ export default function alipayScreenshotParserTest() {
       const ocrText = `账单详情\n测试商户B\n-6.00\n交易成功\n支付时间\n2026-01-15 10:00:00\n商品说明：测试商品说明\n收款方全称\n测试收款方有限公司`;
       const result = AlipayScreenshotParser.parse(ocrText);
       expect(result.payee).assertEqual('测试商户B');
-      expect(result.note).assertEqual('测试商品说明');
+      expect(result.note).assertEqual('');
     });
 
     it('parsesSampleSplitShangPinShuoMingLabel', 0, () => {
       const ocrText = `账单详情\n测试商户B\n-6.00\n交易成功\n支付时间\n2026-01-15 10:00:00\n商品\n说明\n测试商品说明\n收款方全称\n测试收款方有限公司`;
       const result = AlipayScreenshotParser.parse(ocrText);
       expect(result.payee).assertEqual('测试商户B');
-      expect(result.note).assertEqual('测试商品说明');
+      expect(result.note).assertEqual('');
     });
 
     it('doesNotUseShouKuanFangQuanChengAsNote', 0, () => {
       const ocrText = `账单详情\n测试商户B\n-6.00\n收款方全称\n测试收款方有限公司\n商品说明\n测试商品说明`;
       const result = AlipayScreenshotParser.parse(ocrText);
-      expect(result.note).assertEqual('测试商品说明');
+      expect(result.note).assertEqual('');
     });
 
     it('detectsExpenseFromSplitDateTime', 0, () => {
@@ -111,7 +111,7 @@ export default function alipayScreenshotParserTest() {
       const result = AlipayScreenshotParser.parse(ocrText);
       expect(result.type).assertEqual('expense');
       expect(result.payee).assertEqual('商户A');
-      expect(result.note).assertEqual('测试商品');
+      expect(result.note).assertEqual('');
       expect(formatDateTime(result.occurredAt)).assertEqual('2026-07-01 14:30:00');
     });
 
@@ -128,7 +128,7 @@ export default function alipayScreenshotParserTest() {
       const result = AlipayScreenshotParser.parse(ocrText);
       expect(result.type).assertEqual('expense');
       expect(result.payee).assertEqual('测试商户');
-      expect(result.note).assertEqual('商品');
+      expect(result.note).assertEqual('');
     });
   });
 }

@@ -109,7 +109,7 @@ struct BackupPreview {
       },
       secondaryButton: {
         value: '覆盖恢复',
-        fontColor: '#C62828',
+        fontColor: $r('app.color.expense'),
         action: () => {
           this.doOverwriteRestore();
         }
@@ -140,19 +140,19 @@ struct BackupPreview {
       Column({ space: 2 }) {
         Text(tx.note.length > 0 ? tx.note : tx.categoryName)
           .fontSize(14)
-          .fontColor('#333333')
+          .fontColor($r('app.color.text_primary'))
           .maxLines(1)
           .textOverflow({ overflow: TextOverflow.Ellipsis })
         Text(`${formatDateTime(tx.occurredAt)} · ${tx.categoryName}`)
           .fontSize(12)
-          .fontColor('#888888')
+          .fontColor($r('app.color.text_tertiary'))
       }
       .alignItems(HorizontalAlign.Start)
       .layoutWeight(1)
 
       Text(`${tx.type === 'income' ? '+' : '-'}¥${formatAmount(tx.amount)}`)
         .fontSize(14)
-        .fontColor(tx.type === 'income' ? '#2E7D32' : '#C62828')
+        .fontColor(tx.type === 'income' ? $r('app.color.income') : $r('app.color.expense'))
     }
     .width('100%')
     .padding({ top: 8, bottom: 8 })
@@ -163,7 +163,7 @@ struct BackupPreview {
       Row() {
         Text('←')
           .fontSize(22)
-          .fontColor('#333333')
+          .fontColor($r('app.color.text_primary'))
           .onClick(() => router.back())
         Text('备份恢复预览')
           .fontSize(20)
@@ -180,7 +180,7 @@ struct BackupPreview {
         Column() {
           Text('解析中...')
             .fontSize(16)
-            .fontColor('#888888')
+            .fontColor($r('app.color.text_tertiary'))
         }
         .layoutWeight(1)
         .justifyContent(FlexAlign.Center)
@@ -190,18 +190,18 @@ struct BackupPreview {
             Column({ space: 4 }) {
               Text(`文件：${this.fileName}`)
                 .fontSize(14)
-                .fontColor('#666666')
+                .fontColor($r('app.color.text_secondary'))
               if (this.payload !== null) {
                 Text(`导出时间：${formatDateTime(this.payload.exportedAt)}`)
                   .fontSize(14)
-                  .fontColor('#666666')
+                  .fontColor($r('app.color.text_secondary'))
                 Text(`分类 ${this.payload.categories.length} 个（自定义 ${this.getCustomCategoryCount()}）`)
                   .fontSize(14)
-                  .fontColor('#666666')
+                  .fontColor($r('app.color.text_secondary'))
                 Text(`流水 ${this.payload.transactions.length} 条`)
                   .fontSize(18)
                   .fontWeight(FontWeight.Medium)
-                  .fontColor('#333333')
+                  .fontColor($r('app.color.text_primary'))
                   .margin({ top: 4 })
               }
             }
@@ -212,7 +212,7 @@ struct BackupPreview {
               Row() {
                 Text('跳过重复流水')
                   .fontSize(15)
-                  .fontColor('#333333')
+                  .fontColor($r('app.color.text_primary'))
                   .layoutWeight(1)
                 Toggle({ type: ToggleType.Switch, isOn: this.skipDuplicates })
                   .onChange((isOn: boolean) => {
@@ -221,7 +221,7 @@ struct BackupPreview {
               }
               .width('100%')
               .padding(12)
-              .backgroundColor('#F5F5F5')
+              .backgroundColor($r('app.color.card_background'))
               .borderRadius(8)
 
               Column({ space: 4 }) {
@@ -237,20 +237,20 @@ struct BackupPreview {
               }
               .width('100%')
               .padding(12)
-              .backgroundColor('#FAFAFA')
+              .backgroundColor($r('app.color.card_background_alt'))
               .borderRadius(8)
             }
 
             ForEach(this.parseErrors, (msg: string, index: number) => {
               Text(msg)
                 .fontSize(14)
-                .fontColor('#C62828')
+                .fontColor($r('app.color.expense'))
             }, (msg: string, index: number) => `${index}_${msg}`)
 
             if (this.errorMessage.length > 0) {
               Text(this.errorMessage)
                 .fontSize(14)
-                .fontColor('#C62828')
+                .fontColor($r('app.color.expense'))
             }
           }
           .width('100%')
@@ -269,8 +269,8 @@ struct BackupPreview {
             .width('90%')
             .height(44)
             .fontSize(15)
-            .fontColor('#C62828')
-            .backgroundColor('#FFEBEE')
+            .fontColor($r('app.color.expense'))
+            .backgroundColor($r('app.color.expense_light'))
             .enabled(!this.restoring && this.payload !== null && this.parseErrors.length === 0)
             .onClick(() => this.confirmOverwrite())
         }
@@ -280,6 +280,6 @@ struct BackupPreview {
     }
     .width('100%')
     .height('100%')
-    .backgroundColor('#FFFFFF')
+    .backgroundColor($r('app.color.page_background'))
   }
 }

@@ -58,7 +58,7 @@ export class ScreenshotDraftBuilder {
     draft.detectedPlatform = OcrService.detectPlatform(text);
     draft.type = parsed.type;
     draft.payee = parsed.payee;
-    draft.note = parsed.note;
+    draft.note = '';
     draft.occurredAt = parsed.occurredAt > 0 ? parsed.occurredAt : Date.now();
     draft.confidence = parsed.confidence;
 

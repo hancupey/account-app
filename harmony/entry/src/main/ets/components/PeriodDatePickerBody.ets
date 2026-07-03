@@ -8,6 +8,7 @@ import {
   PeriodType,
   yearToPickerIndex
 } from '../utils/DateUtil';
+import { PickerThemeUtil } from '../utils/PickerThemeUtil';
 
 function datePickerModeForPeriod(type: PeriodType): DatePickerMode {
   if (type === 'month') {
@@ -47,6 +48,9 @@ export struct PeriodDatePickerBody {
           range: this.yearLabels,
           selected: this.yearPickerIndex
         })
+          .disappearTextStyle(PickerThemeUtil.disappearStyle())
+          .textStyle(PickerThemeUtil.textStyle())
+          .selectedTextStyle(PickerThemeUtil.selectedStyle())
           .onChange((value: string | string[], index: number | number[]) => {
             const idx = typeof index === 'number' ? index : (index as number[])[0];
             this.yearPickerIndex = idx;
@@ -59,6 +63,9 @@ export struct PeriodDatePickerBody {
           selected: this.selectedDate,
           mode: datePickerModeForPeriod(this.periodType)
         })
+          .disappearTextStyle(PickerThemeUtil.disappearStyle())
+          .textStyle(PickerThemeUtil.textStyle())
+          .selectedTextStyle(PickerThemeUtil.selectedStyle())
           .lunar(false)
           .onDateChange((value: Date) => {
             this.selectedDate = applyPeriodPickerDate(this.periodType, value, this.selectedDate);
@@ -67,7 +74,7 @@ export struct PeriodDatePickerBody {
 
       Text('回到当前')
         .fontSize(16)
-        .fontColor('#1565C0')
+        .fontColor($r('app.color.brand_primary'))
         .margin({ top: 12 })
         .alignSelf(ItemAlign.Center)
         .onClick(() => {

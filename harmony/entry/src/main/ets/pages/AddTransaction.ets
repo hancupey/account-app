@@ -203,16 +203,19 @@ struct AddTransaction {
           .padding({ left: 24, right: 24, top: 8 })
 
           if (this.editingTransactionId === 0) {
-            Button('从截图识别')
-              .width('90%')
-              .height(40)
-              .fontSize(15)
-              .backgroundColor($r('app.color.brand_light'))
-              .fontColor($r('app.color.brand_primary'))
-              .margin({ top: 12 })
-              .onClick(() => {
-                router.pushUrl({ url: 'pages/ScreenshotRecognize' });
-              })
+            Column() {
+              Button('从截图识别')
+                .width('100%')
+                .height(40)
+                .fontSize(15)
+                .backgroundColor($r('app.color.brand_light'))
+                .fontColor($r('app.color.brand_primary'))
+                .onClick(() => {
+                  router.pushUrl({ url: 'pages/ScreenshotRecognize' });
+                })
+            }
+            .width('100%')
+            .padding({ left: 24, right: 24, top: 12 })
           }
 
           Column({ space: 8 }) {

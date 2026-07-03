@@ -4,6 +4,7 @@ import { CategoryStat, DailyExpenseStat, MonthSummary, MonthlyExpenseStat } from
 import { TransactionService } from '../services/TransactionService';
 import { PeriodDatePickerBody } from '../components/PeriodDatePickerBody';
 import {
+  clampDayToMonth,
   dateFromParts,
   formatPeriodLabel,
   getDaysInMonth,
@@ -43,6 +44,10 @@ struct Statistics {
   @State showDatePicker: boolean = false;
   @State drillStack: PeriodSnapshot[] = [];
   @State calendarCells: CalendarCell[] = [];
+  private loadGeneration: number = 0;
+  private hasSubPeriodSelection: boolean = false;
+  private drillDownMonth: number = 0;
+  private drillDownDay: number = 0;
   private periodTypes: PeriodType[] = ['day', 'month', 'year'];
   private weekdayLabels: string[] = ['日', '一', '二', '三', '四', '五', '六'];
   private monthNumbers: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
@@ -71,37 +76,29 @@ struct Statistics {
 
   private loadData(): void {
     this.loading = true;
+    const generation = ++this.loadGeneration;
+    const periodType = this.periodType;
+    const anchorDate = new Date(this.selectedDate.getTime());
     const service = TransactionService.getInstance();
-    const range = service.getPeriodRange(this.periodType, this.selectedDate);
-    const promises: Promise<void>[] = [
-      service.getSummaryInRange(range.startAt, range.endAt).then((s: MonthSummary) => {
-        this.summary = s;
-      }),
-      service.getCategoryBreakdown(range.startAt, range.endAt).then((stats: CategoryStat[]) => {
-        this.categoryStats = stats;
-      })
-    ];
-    if (this.periodType === 'month') {
-      promises.push(
-        service.getDailyExpenseInRange(range.startAt, range.endAt).then((stats: DailyExpenseStat[]) => {
-          this.dailyExpenses = stats;
-        })
-      );
-    } else {
-      this.dailyExpenses = [];
-    }
-    if (this.periodType === 'year') {
-      promises.push(
-        service.getMonthlyExpenseInRange(range.startAt, range.endAt).then((stats: MonthlyExpenseStat[]) => {
-          this.monthlyExpenses = stats;
-        })
-      );
-    } else {
-      this.monthlyExpenses = [];
-    }
-    Promise.all(promises)
-      .then(() => {
-        if (this.periodType === 'month') {
+    const range = service.getPeriodRange(periodType, anchorDate);
+    const summaryPromise = service.getSummaryInRange(range.startAt, range.endAt);
+    const categoryPromise = service.getCategoryBreakdown(range.startAt, range.endAt);
+    const dailyPromise = periodType === 'month'
+      ? service.getDailyExpenseInRange(range.startAt, range.endAt)
+      : Promise.resolve([] as DailyExpenseStat[]);
+    const monthlyPromise = periodType === 'year'
+      ? service.getMonthlyExpenseInRange(range.startAt, range.endAt)
+      : Promise.resolve([] as MonthlyExpenseStat[]);
+    Promise.all([summaryPromise, categoryPromise, dailyPromise, monthlyPromise])
+      .then((results: [MonthSummary, CategoryStat[], DailyExpenseStat[], MonthlyExpenseStat[]]) => {
+        if (generation !== this.loadGeneration) {
+          return;
+        }
+        this.summary = results[0];
+        this.categoryStats = results[1];
+        this.dailyExpenses = results[2];
+        this.monthlyExpenses = results[3];
+        if (periodType === 'month') {
           this.calendarCells = this.buildMonthCalendarCells();
         } else {
           this.calendarCells = [];
@@ -109,13 +106,69 @@ struct Statistics {
         this.loading = false;
       })
       .catch(() => {
-        this.loading = false;
+        if (generation === this.loadGeneration) {
+          this.loading = false;
+        }
       });
+  }
+
+  private clearSubPeriodSelection(): void {
+    this.hasSubPeriodSelection = false;
+    this.drillDownMonth = 0;
+    this.drillDownDay = 0;
+  }
+
+  private recordSubPeriodSelection(month: number, day: number): void {
+    this.hasSubPeriodSelection = true;
+    this.drillDownMonth = month;
+    this.drillDownDay = day;
+  }
+
+  /** 切到「月」：未下钻时默认当月；已点选月份则保留 */
+  private resolveMonthAnchorForSwitch(fromType: PeriodType): Date {
+    const year = this.selectedDate.getFullYear();
+    if (this.hasSubPeriodSelection && this.drillDownMonth > 0) {
+      return dateFromParts(year, this.drillDownMonth, 1);
+    }
+    if (fromType === 'day') {
+      return dateFromParts(year, this.selectedDate.getMonth() + 1, 1);
+    }
+    const now = new Date();
+    const month = now.getMonth() + 1;
+    return dateFromParts(year, month, clampDayToMonth(year, month, now.getDate()));
+  }
+
+  /** 切到「日」：未下钻时默认当日；已点选日期则保留 */
+  private resolveDayAnchorForSwitch(fromType: PeriodType): Date {
+    const year = this.selectedDate.getFullYear();
+    if (this.hasSubPeriodSelection) {
+      const month = this.drillDownMonth > 0 ? this.drillDownMonth : this.selectedDate.getMonth() + 1;
+      const day = this.drillDownDay > 0
+        ? clampDayToMonth(year, month, this.drillDownDay)
+        : clampDayToMonth(year, month, new Date().getDate());
+      return dateFromParts(year, month, day);
+    }
+    const now = new Date();
+    if (fromType === 'month') {
+      const month = this.selectedDate.getMonth() + 1;
+      return dateFromParts(year, month, clampDayToMonth(year, month, now.getDate()));
+    }
+    const month = now.getMonth() + 1;
+    return dateFromParts(year, month, clampDayToMonth(year, month, now.getDate()));
   }
 
   private switchPeriod(type: PeriodType): void {
     if (this.periodType === type) {
       return;
+    }
+    const fromType = this.periodType;
+    const year = this.selectedDate.getFullYear();
+    if (type === 'year') {
+      this.selectedDate = new Date(year, 0, 1, 0, 0, 0, 0);
+    } else if (type === 'month') {
+      this.selectedDate = this.resolveMonthAnchorForSwitch(fromType);
+    } else {
+      this.selectedDate = this.resolveDayAnchorForSwitch(fromType);
     }
     this.periodType = type;
     this.drillStack = [];
@@ -125,6 +178,7 @@ struct Statistics {
   private shiftDate(delta: number): void {
     this.selectedDate = shiftPeriod(this.periodType, this.selectedDate, delta);
     this.drillStack = [];
+    this.clearSubPeriodSelection();
     this.loadData();
   }
 
@@ -151,6 +205,7 @@ struct Statistics {
 
   private drillToDay(date: Date): void {
     this.pushDrillState();
+    this.recordSubPeriodSelection(date.getMonth() + 1, date.getDate());
     this.periodType = 'day';
     this.selectedDate = date;
     this.loadData();
@@ -158,6 +213,7 @@ struct Statistics {
 
   private drillToMonth(month: number): void {
     this.pushDrillState();
+    this.recordSubPeriodSelection(month, 0);
     const year = this.selectedDate.getFullYear();
     this.periodType = 'month';
     this.selectedDate = dateFromParts(year, month, 1);
@@ -486,7 +542,8 @@ struct Statistics {
       } else {
         ForEach(this.categoryStats, (stat: CategoryStat) => {
           this.CategoryRow(stat);
-        }, (stat: CategoryStat) => `${stat.categoryId}_${stat.type}`)
+        }, (stat: CategoryStat) =>
+          `${this.periodType}_${this.selectedDate.getTime()}_${stat.categoryId}_${stat.type}_${stat.total}`)
       }
     }
     .width('100%')
@@ -510,6 +567,13 @@ struct Statistics {
             .onClick(() => {
               this.showDatePicker = false;
               this.drillStack = [];
+              if (this.periodType === 'day') {
+                this.recordSubPeriodSelection(this.selectedDate.getMonth() + 1, this.selectedDate.getDate());
+              } else if (this.periodType === 'month') {
+                this.recordSubPeriodSelection(this.selectedDate.getMonth() + 1, 0);
+              } else {
+                this.clearSubPeriodSelection();
+              }
               this.loadData();
             })
         }
@@ -522,6 +586,7 @@ struct Statistics {
           onJumpToCurrent: () => {
             this.showDatePicker = false;
             this.drillStack = [];
+            this.clearSubPeriodSelection();
             this.loadData();
           }
         })

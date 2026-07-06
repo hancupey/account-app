@@ -10,8 +10,8 @@ const UI_NOISE_PATTERNS: RegExp[] = [
   /交易成功|等待确认|支付成功|已转账|已收款|当前状态/,
   /更多|请选择|添加|计入收支|5G|蓝牙|WLAN|WiFi|Wi-Fi/,
   /支付宝|Alipay|微信支付|WeChat|花呗|余额宝|蚂蚁/,
-  /付款方式|支付奖励|收单机构|账单分类|标签|收付款方|零钱|转账给/,
-  /^(商品|商品说明|商户全称|商户名称|交易对方|收款方备注|转账说明|支付时间|转账时间|收款时间|创建时间|备注)$/,
+  /付款方式|退款方式|支付奖励|收单机构|账单分类|标签|收付款方|零钱|转账给/,
+  /^(商品|商品说明|商户全称|商户名称|交易对方|收款方备注|转账说明|支付时间|转账时间|收款时间|创建时间|退款方式|备注)$/,
   /^[<>＞]+$/
 ];
 
@@ -295,6 +295,65 @@ export function extractLabeledDateTime(lines: string[], labels: string[]): numbe
     }
   }
   return 0;
+}
+
+/** 支付宝退款详情页：金额为无符号正数（如 4.22），非 -4.22 */
+export function isPlainAmountLine(line: string): boolean {
+  const trimmed = line.trim();
+  if (isSignedAmountLine(trimmed)) {
+    return false;
+  }
+  if (isOcrNoiseLine(trimmed)) {
+    return false;
+  }
+  if (TIME_LABEL_IN_LINE.test(trimmed)) {
+    return false;
+  }
+  return /^¥?\s*[\d,]+\.\d{2}$/.test(trimmed);
+}
+
+export function extractPlainAmountValue(line: string): number {
+  const trimmed = line.trim();
+  const match = trimmed.match(/^¥?\s*([\d,]+\.\d{2})$/);
+  if (match && match[1]) {
+    const value = Number.parseFloat(match[1].replace(/,/g, ''));
+    if (!Number.isNaN(value) && value > 0) {
+      return value;
+    }
+  }
+  return 0;
+}
+
+/** 退款详情页：金额行上一行通常是商户名 */
+export function extractMerchantBeforePlainAmount(lines: string[]): string {
+  for (let i = 0; i < lines.length; i++) {
+    const trimmed = lines[i].trim();
+    if (!isPlainAmountLine(trimmed)) {
+      continue;
+    }
+    if (i > 0) {
+      const candidate = lines[i - 1].trim();
+      if (isLikelyMerchantLine(candidate)) {
+        return candidate;
+      }
+    }
+  }
+  return '';
+}
+
+/** 支付宝退款账单详情页（正数金额、创建时间、退款方式等） */
+export function isAlipayRefundBillPage(joined: string, lines: string[]): boolean {
+  if (/退款成功|退款到账/.test(joined)) {
+    return true;
+  }
+  if (/退款方式/.test(joined)) {
+    return true;
+  }
+  const billCategory = extractLabeledNote(lines, ['账单分类']);
+  if (billCategory === '退款') {
+    return true;
+  }
+  return false;
 }
 
 /** 从 OCR 行中提取带正负号的金额（如 -29.00 / ¥-6.00），返回绝对值 */

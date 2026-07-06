@@ -72,7 +72,7 @@ export struct SettingsContent {
           .fontColor($r('app.color.text_primary'))
       }
       .width('100%')
-      .padding({ left: 16, right: 16, top: 48, bottom: 16 })
+      .padding({ left: 16, right: 16, top: 44, bottom: 16 })
 
       List() {
         ListItem() {

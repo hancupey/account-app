@@ -7,7 +7,10 @@ import {
   extractLabeledDateTime,
   extractLabeledNote,
   extractMerchantBeforeAmount,
+  extractMerchantBeforePlainAmount,
+  extractPlainAmountValue,
   extractSignedAmountValue,
+  isAlipayRefundBillPage,
   isLikelyMerchantLine,
   OCR_DATETIME_PATTERN,
   shouldSkipAmountLine,
@@ -19,9 +22,9 @@ import {
  * 支付宝账单详情页截图 OCR 文本解析。
  *
  * 常见页面字段：
- * - 金额：-12.34 / 12.34 / ¥12.34
- * - 交易成功 / 等待确认收货
- * - 支付时间 / 付款时间：2024-01-15 12:30:45
+ * - 金额：-12.34 / 12.34 / ¥12.34（退款详情页为正数无符号，如 4.22）
+ * - 交易成功 / 退款成功 / 等待确认收货
+ * - 支付时间 / 创建时间（退款）：2024-01-15 12:30:45
  * - 商品说明 / 收款方全称 / 对方账户（备注由用户手动填写，不自动识别）
  * - 页面顶部商户名（如 全家FamilyMart）
  */
@@ -56,6 +59,10 @@ export class AlipayScreenshotParser {
       return fromSign;
     }
 
+    if (isAlipayRefundBillPage(joined, lines)) {
+      return 'income';
+    }
+
     const cleaned = stripTypeFalsePositives(joined);
     if (/退款成功|退款到账|转账.*收入|类型[：:]\s*收入/.test(cleaned)) {
       return 'income';
@@ -70,6 +77,7 @@ export class AlipayScreenshotParser {
   }
 
   private static extractAmount(lines: string[], joined: string): number {
+    const isRefund = isAlipayRefundBillPage(joined, lines);
     for (const line of lines) {
       if (shouldSkipAmountLine(line)) {
         continue;
@@ -77,6 +85,17 @@ export class AlipayScreenshotParser {
       const value = extractSignedAmountValue(line);
       if (value > 0) {
         return value;
+      }
+    }
+    if (isRefund) {
+      for (const line of lines) {
+        if (shouldSkipAmountLine(line)) {
+          continue;
+        }
+        const value = extractPlainAmountValue(line);
+        if (value > 0) {
+          return value;
+        }
       }
     }
     for (const line of lines) {
@@ -118,9 +137,16 @@ export class AlipayScreenshotParser {
   }
 
   private static extractPayee(lines: string[]): string {
+    const joined = lines.join('\n');
     const merchantFromAmount = extractMerchantBeforeAmount(lines);
     if (merchantFromAmount.length > 0) {
       return merchantFromAmount;
+    }
+    if (isAlipayRefundBillPage(joined, lines)) {
+      const merchantFromPlain = extractMerchantBeforePlainAmount(lines);
+      if (merchantFromPlain.length > 0) {
+        return merchantFromPlain;
+      }
     }
 
     let passedBillHeader = false;
@@ -144,6 +170,12 @@ export class AlipayScreenshotParser {
   }
 
   private static applyCategoryMapping(result: ParsedTransaction, lines: string[]): void {
+    const joined = lines.join('\n');
+    if (isAlipayRefundBillPage(joined, lines)) {
+      result.type = 'income';
+      result.categoryName = '其它';
+      return;
+    }
     const alipayLabel = AlipayScreenshotParser.extractBillCategory(lines);
     if (alipayLabel.length === 0) {
       return;

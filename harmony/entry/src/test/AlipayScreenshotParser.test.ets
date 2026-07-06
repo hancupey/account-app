@@ -130,5 +130,85 @@ export default function alipayScreenshotParserTest() {
       expect(result.payee).assertEqual('测试商户');
       expect(result.note).assertEqual('');
     });
+
+    it('parsesRefundBillWithPlainPositiveAmount', 0, () => {
+      const ocrText = `10:35
+账单详情
+全部账单
+智能自助设备
+4.22
+退款成功
+创建时间
+2026-07-05 13:35:33
+退款方式
+余额宝
+商品说明
+退款-自助服务-充电桩/示例订单
+账单分类
+退款
+计入收支`;
+      const result = AlipayScreenshotParser.parse(ocrText);
+      expect(result.type).assertEqual('income');
+      expect(result.amount).assertEqual(4.22);
+      expect(result.payee).assertEqual('智能自助设备');
+      expect(result.categoryName).assertEqual('其它');
+      expect(formatDateTime(result.occurredAt)).assertEqual('2026-07-05 13:35:33');
+    });
+
+    it('parsesRefundBillWithHuabeiAndMaskedMerchant', 0, () => {
+      const ocrText = `账单详情
+su**号
+3.47
+退款成功
+创建时间
+2026-07-05 14:20:10
+退款方式
+花呗
+商品说明
+退款-自助服务-充电桩/另一订单
+账单分类
+退款`;
+      const result = AlipayScreenshotParser.parse(ocrText);
+      expect(result.type).assertEqual('income');
+      expect(result.amount).assertEqual(3.47);
+      expect(result.payee).assertEqual('su**号');
+      expect(result.categoryName).assertEqual('其它');
+    });
+
+    it('parsesRefundBillWithLargerAmount', 0, () => {
+      const ocrText = `账单详情
+测试充电桩商户
+52.80
+退款成功
+创建时间
+2026-07-04 09:12:00
+退款方式
+余额宝
+账单分类
+退款`;
+      const result = AlipayScreenshotParser.parse(ocrText);
+      expect(result.type).assertEqual('income');
+      expect(result.amount).assertEqual(52.8);
+      expect(result.payee).assertEqual('测试充电桩商户');
+      expect(formatDateTime(result.occurredAt)).assertEqual('2026-07-04 09:12:00');
+    });
+
+    it('parsesRefundBillWithSplitCreateTime', 0, () => {
+      const ocrText = `账单详情
+退款商户A
+12.00
+退款成功
+创建时间
+2026-07-05
+13:35:33
+退款方式
+余额宝
+账单分类
+退款`;
+      const result = AlipayScreenshotParser.parse(ocrText);
+      expect(result.type).assertEqual('income');
+      expect(result.amount).assertEqual(12);
+      expect(formatDateTime(result.occurredAt)).assertEqual('2026-07-05 13:35:33');
+    });
   });
 }

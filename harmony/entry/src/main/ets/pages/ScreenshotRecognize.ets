@@ -582,92 +582,94 @@ struct ScreenshotRecognize {
       }
     }
     .width('100%')
-    .padding({ left: 16, right: 16, top: 20 })
+    .padding({ left: 16, right: 16 })
     .alignItems(HorizontalAlign.Start)
   }
 
   @Builder
   ResultPhase() {
-    Column() {
-      Scroll() {
-        Column({ space: 16 }) {
-          Text($r('app.string.screenshot_recognize_hint'))
-            .fontSize(14)
-            .fontColor($r('app.color.text_tertiary'))
+    Scroll() {
+      Column({ space: 12 }) {
+        Text($r('app.string.screenshot_recognize_hint'))
+          .fontSize(14)
+          .fontColor($r('app.color.text_tertiary'))
+          .width('100%')
+
+        this.PlatformSelector()
+
+        if (this.selectedPlatform === 'unknown' && this.detectedPlatform !== 'unknown') {
+          Text(`自动识别为：${this.platformLabel(this.detectedPlatform)}`)
+            .fontSize(13)
+            .fontColor($r('app.color.brand_primary'))
             .width('100%')
+        }
 
-          this.PlatformSelector()
-
-          if (this.selectedPlatform === 'unknown' && this.detectedPlatform !== 'unknown') {
-            Text(`自动识别为：${this.platformLabel(this.detectedPlatform)}`)
-              .fontSize(13)
-              .fontColor($r('app.color.brand_primary'))
-              .width('100%')
-          }
-
-          Row({ space: 8 }) {
-            Text(`共 ${this.drafts.length} 张`)
-              .fontSize(14)
-              .fontColor($r('app.color.text_secondary'))
-            Text(`成功 ${this.getRecognizedCount()} 条`)
-              .fontSize(14)
-              .fontColor($r('app.color.income'))
-            if (this.getFailedCount() > 0) {
-              Text(`未识别 ${this.getFailedCount()} 张`)
-                .fontSize(14)
-                .fontColor($r('app.color.expense'))
-            }
-          }
-          .width('100%')
-
-          List({ space: 0 }) {
-            ForEach(this.drafts, (draft: RecognizedDraft) => {
-              this.DraftListItem(draft);
-            }, (draft: RecognizedDraft) => `${draft.id}_${draft.revision}`)
-          }
-          .width('100%')
-          .divider({ strokeWidth: 1, color: $r('app.color.border_light') })
-          .edgeEffect(EdgeEffect.None)
-
-          if (this.errorMessage.length > 0) {
-            Text(this.errorMessage)
+        Row({ space: 8 }) {
+          Text(`共 ${this.drafts.length} 张`)
+            .fontSize(14)
+            .fontColor($r('app.color.text_secondary'))
+          Text(`成功 ${this.getRecognizedCount()} 条`)
+            .fontSize(14)
+            .fontColor($r('app.color.income'))
+          if (this.getFailedCount() > 0) {
+            Text(`未识别 ${this.getFailedCount()} 张`)
               .fontSize(14)
               .fontColor($r('app.color.expense'))
-              .width('100%')
           }
         }
         .width('100%')
-        .padding({ left: 16, right: 16, top: 12, bottom: 12 })
-      }
-      .layoutWeight(1)
-      .scrollBar(BarState.Off)
 
-      Column({ space: 12 }) {
-        Row() {
-          Text($r('app.string.screenshot_delete_after_save'))
-            .fontSize(15)
-            .fontColor($r('app.color.text_primary'))
-            .layoutWeight(1)
-          Toggle({ type: ToggleType.Switch, isOn: this.deleteAfterSave })
-            .onChange((isOn: boolean) => {
-              this.deleteAfterSave = isOn;
-            })
+        List({ space: 0 }) {
+          ForEach(this.drafts, (draft: RecognizedDraft) => {
+            this.DraftListItem(draft);
+          }, (draft: RecognizedDraft) => `${draft.id}_${draft.revision}`)
         }
         .width('100%')
-        .padding({ left: 16, right: 16, top: 8, bottom: 4 })
+        .divider({ strokeWidth: 1, color: $r('app.color.border_light') })
+        .edgeEffect(EdgeEffect.None)
 
-        Button(this.saving ?
-          $r('app.string.screenshot_saving') :
-          `确认入账 ${this.getSavableDrafts().length} 条`)
-          .width('100%')
-          .height(48)
-          .fontSize(16)
-          .enabled(!this.saving && this.getSavableDrafts().length > 0)
-          .margin({ left: 16, right: 16, bottom: 16 })
-          .onClick(() => this.batchConfirmSave())
+        if (this.errorMessage.length > 0) {
+          Text(this.errorMessage)
+            .fontSize(14)
+            .fontColor($r('app.color.expense'))
+            .width('100%')
+        }
       }
+      .width('100%')
+      .padding({ left: 16, right: 16, bottom: 12 })
+      .alignItems(HorizontalAlign.Start)
     }
     .layoutWeight(1)
+    .width('100%')
+    .scrollBar(BarState.Off)
+    .edgeEffect(EdgeEffect.None)
+    .align(Alignment.Top)
+
+    Column({ space: 12 }) {
+      Row() {
+        Text($r('app.string.screenshot_delete_after_save'))
+          .fontSize(15)
+          .fontColor($r('app.color.text_primary'))
+          .layoutWeight(1)
+        Toggle({ type: ToggleType.Switch, isOn: this.deleteAfterSave })
+          .onChange((isOn: boolean) => {
+            this.deleteAfterSave = isOn;
+          })
+      }
+      .width('100%')
+      .padding({ left: 16, right: 16, top: 8, bottom: 4 })
+
+      Button(this.saving ?
+        $r('app.string.screenshot_saving') :
+        `确认入账 ${this.getSavableDrafts().length} 条`)
+        .width('100%')
+        .height(48)
+        .fontSize(16)
+        .enabled(!this.saving && this.getSavableDrafts().length > 0)
+        .margin({ left: 16, right: 16, bottom: 16 })
+        .onClick(() => this.batchConfirmSave())
+    }
+    .width('100%')
   }
 
   @Builder
@@ -689,7 +691,7 @@ struct ScreenshotRecognize {
           .onClick(() => this.saveEdit())
       }
       .width('100%')
-      .padding({ left: 16, right: 16, top: 16, bottom: 10 })
+      .padding({ left: 16, right: 16, top: 16, bottom: 8 })
 
       Scroll() {
         Column({ space: 16 }) {
@@ -876,7 +878,7 @@ struct ScreenshotRecognize {
             .width(22)
         }
         .width('100%')
-        .padding({ left: 16, right: 16, top: 16, bottom: 10 })
+        .padding({ left: 16, right: 16, top: 16, bottom: 8 })
 
         if (this.drafts.length === 0) {
           this.PickPhase()
@@ -886,12 +888,14 @@ struct ScreenshotRecognize {
       }
       .width('100%')
       .height('100%')
+      .justifyContent(FlexAlign.Start)
       .backgroundColor($r('app.color.page_background'))
 
       if (this.editingDraftId.length > 0) {
         this.EditOverlay()
       }
     }
+    .alignContent(Alignment.TopStart)
     .width('100%')
     .height('100%')
     .backgroundColor($r('app.color.page_background'))
